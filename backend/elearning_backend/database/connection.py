@@ -1,15 +1,45 @@
+from typing import List
+
 from databases import Database
-from elearning_backend.database.models import Base
-from sqlalchemy import create_engine
+from sqlalchemy import Column, DateTime, Integer, String, create_engine
+from sqlalchemy.sql import func
+from sqlalchemy.sql.schema import ForeignKey, MetaData, Table
 
 DATABASE_URL = "sqlite:///./database.db"
+
+
+class Tables:
+    def __init__(self, metadata: MetaData) -> None:
+        self.courses = Table(
+            "courses",
+            metadata,
+            Column("id", Integer, primary_key=True, autoincrement=True),
+            Column("name", String, nullable=False),
+            Column("image", String, nullable=True),
+            Column("created_at", DateTime(timezone=True), server_default=func.now()),
+            Column("updated_at", DateTime(timezone=True), onupdate=func.now()),
+        )
+
+        self.lessons = Table(
+            "lessons",
+            metadata,
+            Column("id", Integer, primary_key=True, autoincrement=True),
+            Column("name", String, nullable=False),
+            Column("duration", Integer, nullable=False),
+            Column("description", String(200), nullable=False),
+            Column("course_id", Integer, ForeignKey("courses.id")),
+            Column("created_at", DateTime(timezone=True), server_default=func.now()),
+            Column("updated_at", DateTime(timezone=True), onupdate=func.now()),
+        )
 
 
 class DatabaseConnection:
     def __init__(self, url=DATABASE_URL) -> None:
         self.db = Database(url)
-        self.metadata = Base.metadata
         self.engine = create_engine(url, connect_args={"check_same_thread": False})
+
+        self.metadata = MetaData()
+        self.tables = Tables(self.metadata)
 
     def create_tables(self) -> None:
         self.metadata.create_all(self.engine)
