@@ -1,8 +1,7 @@
-from fastapi.param_functions import Depends
-from elearning_backend.database.connection import get_database_connection
 from fastapi import FastAPI
-from elearning_backend.database.repositories.courses import CoursesRepository
 
+from .database.connection import get_database_connection
+from .handlers.courses import courses_router
 
 app = FastAPI()
 
@@ -21,17 +20,4 @@ async def shutdown():
     await database.disconnect()
 
 
-@app.get("/")
-async def create_course(
-    courses_repository: CoursesRepository = Depends(),
-):
-    # course = await courses_repository.create(
-    #     name="test",
-    #     image_url="http://test.com?image=123123",
-    # )
-
-    # return course
-
-    # await courses_repository.findAll()
-
-    await courses_repository.update_by_id(10, name="testimage", image="test")
+app.include_router(courses_router)
