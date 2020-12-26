@@ -200,7 +200,7 @@ standard = ["websockets (>=8.0.0,<9.0.0)", "watchgod (>=0.6,<0.7)", "python-dote
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9934c8d6808a6b00a7801838bd38435b9e1d1cd00c438f7558c0d73aa776941d"
+content-hash = "f3858afb181443891f9896fbd29ab2885d6b4ae9228ad5d3a0cc53ee3425c924"
 
 [metadata.files]
 aiosqlite = [

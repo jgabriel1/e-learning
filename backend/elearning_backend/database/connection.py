@@ -1,5 +1,3 @@
-from typing import List
-
 from databases import Database
 from sqlalchemy import Column, DateTime, Integer, String, create_engine
 from sqlalchemy.sql import func
