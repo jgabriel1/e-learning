@@ -25,6 +25,7 @@ class Tables:
             Column("name", String, nullable=False),
             Column("duration", Integer, nullable=False),
             Column("description", String(200), nullable=False),
+            Column("video_id", String),
             Column("course_id", Integer, ForeignKey("courses.id")),
             Column("created_at", DateTime(timezone=True), server_default=func.now()),
             Column("updated_at", DateTime(timezone=True), onupdate=func.now()),
