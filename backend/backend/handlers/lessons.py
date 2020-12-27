@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from ..database.repositories import LessonsRepository
 
-lessons_router = APIRouter("/lessons")
+lessons_router = APIRouter(prefix="/lessons")
 
 
 class CreateNewLessonData(BaseModel):
