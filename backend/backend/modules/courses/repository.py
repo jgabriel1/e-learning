@@ -1,10 +1,12 @@
 from datetime import datetime
 from typing import List
 
+from backend.shared.database.connection import (
+    DatabaseConnection,
+    get_database_connection,
+)
 from fastapi import Depends
 from pydantic import AnyHttpUrl, BaseModel, parse_obj_as
-
-from ..connection import DatabaseConnection, get_database_connection
 
 
 class Course(BaseModel):
