@@ -3,7 +3,7 @@ from sqlalchemy import MetaData, create_engine
 
 from .tables import Tables
 
-DATABASE_URL = "sqlite:///./database.db"
+from backend.shared.config import DATABASE_URL
 
 
 class DatabaseConnection:
