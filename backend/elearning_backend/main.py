@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from .database.connection import get_database_connection
 from .handlers.courses import courses_router
+from .handlers.lessons import lessons_router
 
 app = FastAPI()
 
@@ -21,3 +22,4 @@ async def shutdown():
 
 
 app.include_router(courses_router)
+app.include_router(lessons_router)
