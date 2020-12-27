@@ -27,7 +27,7 @@ async def list_lessons_for_course(
     return lessons
 
 
-@courses_router.post("/")
+@courses_router.post("/", status_code=201)
 async def create_course(
     new_course: CreateNewCourseData,
     courses_repository: CoursesRepository = Depends(),
@@ -40,7 +40,7 @@ async def create_course(
     return created_course
 
 
-@courses_router.put("/:course_id", status_code=204)
+@courses_router.put("/{course_id}", status_code=204)
 async def update_course(
     course_id: int,
     update_course_data: UpdateCourseData,
