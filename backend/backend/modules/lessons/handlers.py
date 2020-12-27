@@ -1,26 +1,9 @@
-from fastapi import APIRouter
-from fastapi.param_functions import Depends
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
 
-from ..database.repositories import LessonsRepository
+from .repository import LessonsRepository
+from .schemas import CreateNewLessonData, UpdateLessonData
 
 lessons_router = APIRouter(prefix="/lessons")
-
-
-class CreateNewLessonData(BaseModel):
-    name: str
-    duration: int
-    description: str
-    video_id: str
-    course_id: int
-
-
-class UpdateLessonData(BaseModel):
-    name: str = None
-    duration: int = None
-    description: str = None
-    video_id: str = None
-    course_id: int = None
 
 
 @lessons_router.post("/", status_code=201)

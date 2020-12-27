@@ -1,20 +1,12 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, Header
-from pydantic import BaseModel
 
-from ..database.repositories import CoursesRepository, LessonsRepository
+from backend.modules.lessons.repository import LessonsRepository
+from fastapi import APIRouter, Depends, Header
+
+from .repository import CoursesRepository
+from .schemas import CreateNewCourseData, UpdateCourseData
 
 courses_router = APIRouter(prefix="/courses")
-
-
-class CreateNewCourseData(BaseModel):
-    name: str
-    image: str
-
-
-class UpdateCourseData(BaseModel):
-    name: str = None
-    image: str = None
 
 
 @courses_router.get("/")
