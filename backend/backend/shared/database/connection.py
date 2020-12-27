@@ -1,35 +1,9 @@
 from databases import Database
-from sqlalchemy import Column, DateTime, Integer, String, create_engine
-from sqlalchemy.sql import func
-from sqlalchemy.sql.schema import ForeignKey, MetaData, Table
+from sqlalchemy import MetaData, create_engine
+
+from .tables import Tables
 
 DATABASE_URL = "sqlite:///./database.db"
-
-
-class Tables:
-    def __init__(self, metadata: MetaData) -> None:
-        self.courses = Table(
-            "courses",
-            metadata,
-            Column("id", Integer, primary_key=True, autoincrement=True),
-            Column("name", String, nullable=False),
-            Column("image", String, nullable=True),
-            Column("created_at", DateTime(timezone=True), server_default=func.now()),
-            Column("updated_at", DateTime(timezone=True), onupdate=func.now()),
-        )
-
-        self.lessons = Table(
-            "lessons",
-            metadata,
-            Column("id", Integer, primary_key=True, autoincrement=True),
-            Column("name", String, nullable=False),
-            Column("duration", Integer, nullable=False),
-            Column("description", String(200), nullable=False),
-            Column("video_id", String),
-            Column("course_id", Integer, ForeignKey("courses.id")),
-            Column("created_at", DateTime(timezone=True), server_default=func.now()),
-            Column("updated_at", DateTime(timezone=True), onupdate=func.now()),
-        )
 
 
 class DatabaseConnection:
