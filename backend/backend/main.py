@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-from .database.connection import get_database_connection
-from .handlers.courses import courses_router
-from .handlers.lessons import lessons_router
+from backend.modules.courses.handlers import courses_router
+from backend.modules.lessons.handlers import lessons_router
+
+from .shared.database.connection import get_database_connection
 
 app = FastAPI()
 
