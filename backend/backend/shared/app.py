@@ -1,5 +1,5 @@
-from backend.modules.courses.handlers import courses_router
-from backend.modules.lessons.handlers import lessons_router
+from backend.modules.courses.routes import courses_router
+from backend.modules.lessons.routes import lessons_router
 from fastapi import FastAPI
 
 from .database.connection import get_database_connection
