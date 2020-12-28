@@ -20,13 +20,15 @@ class Lesson(BaseModel):
     updated_at: datetime = None
 
 
-class LessonsRepository(BaseModel):
+class LessonsRepository:
     def __init__(
         self,
         connection: DatabaseConnection = Depends(get_database_connection),
     ) -> None:
         self.db = connection.db
         self.table = connection.tables.lessons
+
+        print("lessons repository instantiated")
 
     async def create(
         self,
