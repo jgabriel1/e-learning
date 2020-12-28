@@ -1,24 +1,20 @@
 from typing import Optional
 
 from backend.modules.lessons.repository import LessonsRepository
-from fastapi import APIRouter, Depends, Header
+from fastapi import Depends, Header, Path, Response
 
 from .repository import CoursesRepository
 from .schemas import CreateNewCourseData, UpdateCourseData
 
-courses_router = APIRouter(prefix="/courses")
 
-
-@courses_router.get("/")
 async def list_all_courses(courses_repository: CoursesRepository = Depends()):
     courses = await courses_repository.findAll()
 
     return courses
 
 
-@courses_router.get("/{course_id}/lessons")
 async def list_lessons_for_course(
-    course_id: int,
+    course_id: int = Path(...),
     mac_id: Optional[str] = Header(None),
     lessons_repository: LessonsRepository = Depends(),
 ):
@@ -27,7 +23,6 @@ async def list_lessons_for_course(
     return lessons
 
 
-@courses_router.post("/", status_code=201)
 async def create_course(
     new_course: CreateNewCourseData,
     courses_repository: CoursesRepository = Depends(),
@@ -40,10 +35,9 @@ async def create_course(
     return created_course
 
 
-@courses_router.put("/{course_id}", status_code=204)
 async def update_course(
-    course_id: int,
     update_course_data: UpdateCourseData,
+    course_id: int = Path(...),
     courses_repository: CoursesRepository = Depends(),
 ):
     await courses_repository.update_by_id(
@@ -51,3 +45,5 @@ async def update_course(
         name=update_course_data.name,
         image=update_course_data.image,
     )
+
+    return Response(status_code=204)
