@@ -43,13 +43,15 @@ class CoursesRepository:
         self, id: int, *, name: str = None, image: str = None
     ) -> None:
         await self.db.execute(
-            f"""UPDATE courses
-                SET {",".join([
-                    f"name = '{name}'",
-                    f"image = '{image}'"
-                ])}
-                WHERE id = {id};
-            """,
+            self.table.update()
+            .where(self.table.c.id == id)
+            .values(
+                {
+                    key: value
+                    for key, value in {"name": name, "image": image}.items()
+                    if value is not None
+                }
+            ),
         )
 
     async def findAll(self) -> List[Course]:
