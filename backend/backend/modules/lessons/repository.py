@@ -73,16 +73,20 @@ class LessonsRepository(BaseModel):
         video_id: str = None,
     ) -> None:
         await self.db.execute(
-            f"""
-                UPDATE lessons
-                SET {",".join([
-                    f"name = '{name}'",
-                    f"duration = '{duration}'",
-                    f"description = '{description}'",
-                    f"video_id = '{video_id}'",
-                ])}
-                WHERE id = {id};
-            """,
+            self.table.update()
+            .where(self.table.c.id == id)
+            .values(
+                {
+                    key: value
+                    for key, value in {
+                        "name": name,
+                        "duration": duration,
+                        "description": description,
+                        "video_id": video_id,
+                    }.items()
+                    if value is not None
+                }
+            ),
         )
 
     async def list_by_course_id(self, course_id: int) -> List[Lesson]:
