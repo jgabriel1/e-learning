@@ -1,12 +1,14 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import Home from './pages/Home';
 
 const App: React.FC = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <StatusBar style="auto" />
-      <Text>Hello World</Text>
+      <StatusBar style="light" />
+      <Home />
     </View>
   );
 };
