@@ -1,11 +1,14 @@
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export const Container = styled.View`
   background-color: #fff;
   height: 172px;
   border-radius: 16px;
   margin: 0 8px 18px 8px;
-  flex-grow: 1;
+  width: ${(SCREEN_WIDTH - 48 - 16) / 2}px;
 `;
 
 export const CourseImage = styled.ImageBackground.attrs({

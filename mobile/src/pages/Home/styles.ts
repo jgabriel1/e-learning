@@ -1,4 +1,11 @@
+import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
+
+interface CourseProps {
+  title: string;
+  lessonsCount: number;
+  imageURL: string;
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -54,12 +61,11 @@ export const CoursesListCounter = styled.Text`
   font-size: 15px;
 `;
 
-export const CoursesListContent = styled.View`
-  padding-left: 16px;
-  padding-right: 16px;
-
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  justify-content: space-between;
-`;
+export const CoursesListContent = styled(
+  FlatList as new () => FlatList<CourseProps>,
+).attrs({
+  contentContainerStyle: {
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+  },
+})``;

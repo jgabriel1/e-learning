@@ -41,30 +41,37 @@ const Home = () => {
           <CoursesListCounter>43 cursos</CoursesListCounter>
         </CoursesListHeader>
 
-        <CoursesListContent>
-          <CourseCard
-            title="Química"
-            lessonsCount={10}
-            imageURL="https://jobs.newscientist.com/getasset/c40a5488-11be-43b0-843f-a2e6ef9f0612/"
-          />
-
-          <CourseCard
-            title="Geografia"
-            lessonsCount={10}
-            imageURL="https://www.wits.ac.za/media/wits-university/course-finder-images/world-map-freepik.png"
-          />
-          <CourseCard
-            title="Matemática"
-            lessonsCount={10}
-            imageURL="https://images.theconversation.com/files/207820/original/file-20180226-140213-yox11e.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip"
-          />
-
-          <CourseCard
-            title="Física"
-            lessonsCount={10}
-            imageURL="https://noic.com.br/wp-content/uploads/2018/10/physics_fundamentals.jpg"
-          />
-        </CoursesListContent>
+        <CoursesListContent
+          data={[
+            {
+              title: 'Química',
+              lessonsCount: 10,
+              imageURL:
+                'https://jobs.newscientist.com/getasset/c40a5488-11be-43b0-843f-a2e6ef9f0612/',
+            },
+            {
+              title: 'Geografia',
+              lessonsCount: 10,
+              imageURL:
+                'https://www.wits.ac.za/media/wits-university/course-finder-images/world-map-freepik.png',
+            },
+            {
+              title: 'Matemática',
+              lessonsCount: 10,
+              imageURL:
+                'https://images.theconversation.com/files/207820/original/file-20180226-140213-yox11e.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
+            },
+            {
+              title: 'Física',
+              lessonsCount: 10,
+              imageURL:
+                'https://noic.com.br/wp-content/uploads/2018/10/physics_fundamentals.jpg',
+            },
+          ]}
+          keyExtractor={item => item.title}
+          renderItem={({ item }) => <CourseCard {...item} />}
+          numColumns={2}
+        />
       </CoursesList>
     </Container>
   );
