@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -7,6 +7,7 @@ import CourseList from '../../components/CourseList';
 import { Container, Header, SearchInputContainer, SearchInput } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
+import CourseCard from '../../components/CourseCard';
 
 const LIST_DATA = [
   {
@@ -36,6 +37,10 @@ const LIST_DATA = [
 ];
 
 const Home = () => {
+  const handleNavigateToCourse = useCallback((courseName: string) => {
+    console.log(courseName);
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -51,7 +56,16 @@ const Home = () => {
         />
       </SearchInputContainer>
 
-      <CourseList courses={LIST_DATA} title="Categorias" />
+      <CourseList
+        courses={LIST_DATA}
+        title="Categorias"
+        renderItem={({ item }) => (
+          <CourseCard
+            {...item}
+            onPress={() => handleNavigateToCourse(item.title)}
+          />
+        )}
+      />
     </Container>
   );
 };

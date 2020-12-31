@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-
-import CourseCard from '../CourseCard';
+import { ListRenderItem } from 'react-native';
 
 import {
   Container,
@@ -24,9 +23,14 @@ export interface CourseListItem extends Course {
 interface CourseListProps {
   title: string;
   courses: Course[];
+  renderItem: ListRenderItem<Course>;
 }
 
-const CourseList: React.FC<CourseListProps> = ({ title, courses }) => {
+const CourseList: React.FC<CourseListProps> = ({
+  title,
+  courses,
+  renderItem,
+}) => {
   const coursesList = useMemo(() => {
     const list: CourseListItem[] = [...courses];
 
@@ -54,8 +58,12 @@ const CourseList: React.FC<CourseListProps> = ({ title, courses }) => {
       <Content
         data={coursesList}
         keyExtractor={(_, index) => String(index)}
-        renderItem={({ item }) =>
-          !item?.isLast ? <CourseCard {...item} /> : <EmptyView />
+        renderItem={({ item, index, separators }) =>
+          !item?.isLast ? (
+            renderItem({ item, index, separators })
+          ) : (
+            <EmptyView />
+          )
         }
         numColumns={2}
         showsVerticalScrollIndicator={false}
