@@ -1,21 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-import CourseCard from '../../components/CourseCard';
+import CourseList from '../../components/CourseList';
 
-import {
-  Container,
-  Header,
-  SearchInputContainer,
-  SearchInput,
-  CoursesList,
-  CoursesListHeader,
-  CoursesListCounter,
-  CoursesListTitle,
-  CoursesListContent,
-  EmptyView,
-} from './styles';
+import { Container, Header, SearchInputContainer, SearchInput } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
 
@@ -47,26 +36,6 @@ const LIST_DATA = [
 ];
 
 const Home = () => {
-  const listData = useMemo(() => {
-    const list: {
-      title: string;
-      lessonsCount: number;
-      imageURL: string;
-      isLast?: boolean;
-    }[] = [...LIST_DATA];
-
-    if (LIST_DATA.length % 2) {
-      list.push({
-        title: '',
-        lessonsCount: 0,
-        imageURL: '',
-        isLast: true,
-      });
-    }
-
-    return list;
-  }, []);
-
   return (
     <Container>
       <Header>
@@ -82,23 +51,7 @@ const Home = () => {
         />
       </SearchInputContainer>
 
-      <CoursesList>
-        <CoursesListHeader>
-          <CoursesListTitle>Categorias</CoursesListTitle>
-
-          <CoursesListCounter>43 cursos</CoursesListCounter>
-        </CoursesListHeader>
-
-        <CoursesListContent
-          data={listData}
-          keyExtractor={(_, index) => String(index)}
-          renderItem={({ item }) =>
-            !item?.isLast ? <CourseCard {...item} /> : <EmptyView />
-          }
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-        />
-      </CoursesList>
+      <CourseList courses={LIST_DATA} title="Categorias" />
     </Container>
   );
 };
