@@ -1,5 +1,7 @@
 import styled from 'styled-components/native';
 
+export const Pressable = styled.TouchableWithoutFeedback``;
+
 export const Container = styled.View`
   background-color: #fff;
   height: 172px;

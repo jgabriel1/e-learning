@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Pressable,
   Container,
   Title,
   LessonsCount,
@@ -12,23 +13,29 @@ interface CourseCardProps {
   title: string;
   lessonsCount: number;
   imageURL: string;
+  onPress: () => void | Promise<void>;
+  onLongPress?: () => void | Promise<void>;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
   title,
   lessonsCount,
   imageURL,
+  onPress,
+  onLongPress,
 }) => {
   return (
-    <Container>
-      <CourseImage source={{ uri: imageURL }} />
+    <Pressable onPress={onPress} onLongPress={onLongPress}>
+      <Container>
+        <CourseImage source={{ uri: imageURL }} />
 
-      <InfoContainer>
-        <Title>{title}</Title>
+        <InfoContainer>
+          <Title>{title}</Title>
 
-        <LessonsCount>{lessonsCount} Aulas</LessonsCount>
-      </InfoContainer>
-    </Container>
+          <LessonsCount>{lessonsCount} Aulas</LessonsCount>
+        </InfoContainer>
+      </Container>
+    </Pressable>
   );
 };
 
