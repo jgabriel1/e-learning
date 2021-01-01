@@ -34,6 +34,7 @@ const Lessons: React.FC = () => {
         </LessonsListHeader>
 
         <LessonsListContent
+          keyExtractor={(_, index) => String(index)}
           data={[
             {
               name: 'Introdução à teoria matemática',
