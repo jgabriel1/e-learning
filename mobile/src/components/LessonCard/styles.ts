@@ -1,8 +1,10 @@
 import styled from 'styled-components/native';
 
+export const Pressable = styled.TouchableWithoutFeedback``;
+
 export const Container = styled.View`
   flex-direction: row-reverse;
-  margin: 0 24px 16px;
+  margin-bottom: 16px;
   align-items: center;
   position: relative;
 `;
@@ -54,6 +56,7 @@ export const BottomContainer = styled.View`
 export const InfoContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  align-self: flex-end;
 `;
 
 export const LessonNumber = styled.Text`
@@ -70,7 +73,6 @@ export const LessonDurationContainer = styled.View`
 export const LessonDurationText = styled.Text`
   font-size: 12px;
   margin-left: 5px;
-  line-height: 13px;
   color: #c4c4d1;
 `;
 

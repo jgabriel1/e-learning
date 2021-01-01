@@ -1,3 +1,4 @@
+import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
@@ -38,3 +39,17 @@ export const LessonsListCounter = styled.Text`
   color: #a0a0b2;
   text-align: right;
 `;
+
+export const LessonsListContent = styled(
+  FlatList as new () => FlatList<{
+    name: string;
+    lessonIndex: number;
+    duration: number;
+    isCompleted: boolean;
+  }>,
+).attrs({
+  contentContainerStyle: {
+    paddingHorizontal: 24,
+    justifyContent: 'space-between',
+  },
+})``;

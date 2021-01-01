@@ -1,4 +1,5 @@
 import React from 'react';
+import { Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import {
@@ -17,44 +18,63 @@ import {
   CompletedText,
 } from './styles';
 
-const LessonCard = () => {
-  const completed = true;
+interface LessonCardProps {
+  name: string;
+  lessonIndex: number;
+  duration: number;
+  isCompleted: boolean;
+  onPress?: () => void | Promise<void>;
+}
 
+const LessonCard: React.FC<LessonCardProps> = ({
+  name,
+  lessonIndex,
+  duration,
+  isCompleted,
+  onPress,
+}) => {
   return (
-    <Container>
-      <MainContainer>
-        <TitleContainer>
-          <Title>Introdução à teoria matemática</Title>
-        </TitleContainer>
+    <Pressable onPress={onPress}>
+      <Container>
+        <MainContainer>
+          <TitleContainer>
+            <Title>{name}</Title>
+          </TitleContainer>
 
-        <BottomContainer>
-          <InfoContainer>
-            <LessonNumber>Aula 01</LessonNumber>
+          <BottomContainer>
+            <InfoContainer>
+              <LessonNumber>
+                {`Aula ${(lessonIndex || 0).toString().padStart(2, '0')}`}
+              </LessonNumber>
 
-            <LessonDurationContainer>
-              <Feather name="clock" size={12} color="#C4C4D1" />
-              <LessonDurationText>5 min</LessonDurationText>
-            </LessonDurationContainer>
-          </InfoContainer>
+              <LessonDurationContainer>
+                <Feather name="clock" size={12} color="#C4C4D1" />
 
-          {completed && (
-            <CompletedContainer>
-              <CompletedText>Completo!</CompletedText>
-            </CompletedContainer>
-          )}
-        </BottomContainer>
-      </MainContainer>
+                <LessonDurationText>
+                  {`${duration || 0} min`}
+                </LessonDurationText>
+              </LessonDurationContainer>
+            </InfoContainer>
 
-      {completed ? (
-        <GreenPlayIconContainer>
-          <Feather name="play-circle" size={34} color="#fff" />
-        </GreenPlayIconContainer>
-      ) : (
-        <RedPlayIconContainer>
-          <Feather name="play-circle" size={34} color="#fff" />
-        </RedPlayIconContainer>
-      )}
-    </Container>
+            {isCompleted && (
+              <CompletedContainer>
+                <CompletedText>Completo!</CompletedText>
+              </CompletedContainer>
+            )}
+          </BottomContainer>
+        </MainContainer>
+
+        {isCompleted ? (
+          <GreenPlayIconContainer>
+            <Feather name="play-circle" size={34} color="#fff" />
+          </GreenPlayIconContainer>
+        ) : (
+          <RedPlayIconContainer>
+            <Feather name="play-circle" size={34} color="#fff" />
+          </RedPlayIconContainer>
+        )}
+      </Container>
+    </Pressable>
   );
 };
 
