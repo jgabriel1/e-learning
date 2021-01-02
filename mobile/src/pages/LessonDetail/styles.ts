@@ -32,6 +32,7 @@ export const VideoPlaceholder = styled.View`
 `;
 
 export const Title = styled.Text`
+  font-family: ${'rubik400'};
   margin-bottom: 16px;
   font-size: 30px;
   line-height: 36px;
@@ -45,6 +46,7 @@ export const InfoContainer = styled.View`
 `;
 
 export const Index = styled.Text`
+  font-family: ${'roboto400'};
   color: #a0a0b2;
   margin-right: 16px;
   font-size: 12px;
@@ -57,6 +59,7 @@ export const DurationContainer = styled.View`
 `;
 
 export const DurationText = styled.Text`
+  font-family: ${'roboto400'};
   color: #a0a0b2;
   margin-left: 8px;
   font-size: 12px;
@@ -64,6 +67,7 @@ export const DurationText = styled.Text`
 `;
 
 export const Description = styled.Text`
+  font-family: ${'roboto400'};
   color: #6c6c80;
   font-size: 15px;
   line-height: 25px;
@@ -93,6 +97,7 @@ export const NextLessonButton = styled(NavigateLessonButton)`
 `;
 
 const NavigateLessonButtonText = styled.Text`
+  font-family: ${'roboto400'};
   font-size: 15px;
 `;
 
