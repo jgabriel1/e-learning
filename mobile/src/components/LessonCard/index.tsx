@@ -4,8 +4,7 @@ import { Feather } from '@expo/vector-icons';
 
 import {
   Container,
-  GreenPlayIconContainer,
-  RedPlayIconContainer,
+  PlayIconContainer,
   MainContainer,
   TitleContainer,
   Title,
@@ -64,15 +63,9 @@ const LessonCard: React.FC<LessonCardProps> = ({
           </BottomContainer>
         </MainContainer>
 
-        {isCompleted ? (
-          <GreenPlayIconContainer>
-            <Feather name="play-circle" size={34} color="#fff" />
-          </GreenPlayIconContainer>
-        ) : (
-          <RedPlayIconContainer>
-            <Feather name="play-circle" size={34} color="#fff" />
-          </RedPlayIconContainer>
-        )}
+        <PlayIconContainer isCompleted={isCompleted}>
+          <Feather name="play-circle" size={34} color="#fff" />
+        </PlayIconContainer>
       </Container>
     </Pressable>
   );

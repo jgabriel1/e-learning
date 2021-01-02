@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 export const Pressable = styled.TouchableWithoutFeedback``;
 
@@ -9,20 +9,21 @@ export const Container = styled.View`
   position: relative;
 `;
 
-const PlayIconContainer = styled.View`
+export const PlayIconContainer = styled.View<{ isCompleted: boolean }>`
   height: 68px;
   width: 68px;
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-`;
 
-export const GreenPlayIconContainer = styled(PlayIconContainer)`
-  background-color: #61c5bd;
-`;
-
-export const RedPlayIconContainer = styled(PlayIconContainer)`
-  background-color: #ff6680;
+  ${props =>
+    props.isCompleted
+      ? css`
+          background-color: #61c5bd;
+        `
+      : css`
+          background-color: #ff6680;
+        `}
 `;
 
 export const MainContainer = styled.View`
