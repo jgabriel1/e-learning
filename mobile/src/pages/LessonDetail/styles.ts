@@ -90,6 +90,7 @@ const NavigateLessonButton = styled.View`
 
 export const PreviousLessonButton = styled(NavigateLessonButton)`
   background-color: transparent;
+  border: 1px solid #ff6680;
 `;
 
 export const NextLessonButton = styled(NavigateLessonButton)`
