@@ -24,6 +24,7 @@ export const SearchInputContainer = styled.View`
 `;
 
 export const SearchInput = styled.TextInput`
+  font-family: ${'roboto400'};
   color: #3d3d4c;
   margin-left: 16px;
   font-size: 15px;
