@@ -43,6 +43,7 @@ export const TitleContainer = styled.View`
 `;
 
 export const Title = styled.Text`
+  font-family: ${'rubik400'};
   font-size: 15px;
   line-height: 20px;
   color: #6c6c80;
@@ -61,6 +62,7 @@ export const InfoContainer = styled.View`
 `;
 
 export const LessonNumber = styled.Text`
+  font-family: ${'roboto400'};
   margin-right: 16px;
   color: #c4c4d1;
   font-size: 12px;
@@ -72,6 +74,7 @@ export const LessonDurationContainer = styled.View`
 `;
 
 export const LessonDurationText = styled.Text`
+  font-family: ${'roboto400'};
   font-size: 12px;
   margin-left: 5px;
   color: #c4c4d1;
@@ -86,6 +89,7 @@ export const CompletedContainer = styled.View`
 `;
 
 export const CompletedText = styled.Text`
+  font-family: ${'roboto500'};
   font-size: 12px;
   color: #fff;
 `;

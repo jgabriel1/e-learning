@@ -28,12 +28,14 @@ export const LessonsListHeader = styled.View`
 `;
 
 export const LessonsListTitle = styled.Text`
+  font-family: ${'rubik400'};
   font-size: 30px;
   line-height: 36px;
   color: #3d3d4c;
 `;
 
 export const LessonsListCounter = styled.Text`
+  font-family: ${'roboto400'};
   font-size: 15px;
   line-height: 18px;
   color: #a0a0b2;
