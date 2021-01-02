@@ -44,7 +44,7 @@ const LessonDetail: React.FC = () => {
           <Index>Aula 01</Index>
 
           <DurationContainer>
-            <Feather name="clock" size={12} color="#a0a0b2" />
+            <Feather name="clock" size={16} color="#a0a0b2" />
 
             <DurationText>5 min</DurationText>
           </DurationContainer>
