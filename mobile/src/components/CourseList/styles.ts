@@ -18,11 +18,13 @@ export const Header = styled.View`
 `;
 
 export const Title = styled.Text`
+  font-family: ${'rubik400'};
   color: #3d3d4c;
   font-size: 20px;
 `;
 
 export const Counter = styled.Text`
+  font-family: ${'roboto400'};
   color: #a0a0b2;
   font-size: 15px;
 `;
