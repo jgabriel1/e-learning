@@ -34,6 +34,7 @@ export const InfoContainer = styled.View.attrs({
 `;
 
 export const Title = styled.Text`
+  font-family: ${'rubik400'};
   color: #6c6c80;
   font-size: 15px;
   line-height: 20px;
@@ -41,6 +42,7 @@ export const Title = styled.Text`
 `;
 
 export const LessonsCount = styled.Text`
+  font-family: ${'roboto400'};
   font-size: 10px;
   line-height: 12px;
   color: #c4c4d1;
