@@ -2,6 +2,8 @@ import React from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
+import ReturnButton from '../../components/ReturnButton';
+
 import {
   Container,
   Header,
@@ -26,7 +28,7 @@ const LessonDetail: React.FC = () => {
   return (
     <Container>
       <Header>
-        <Feather name="arrow-left" size={24} color="#FF6680" />
+        <ReturnButton />
 
         <Image source={logoImg} />
 
