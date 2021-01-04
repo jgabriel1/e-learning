@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import CourseList from '../../components/CourseList';
 
@@ -37,9 +38,17 @@ const LIST_DATA = [
 ];
 
 const Home = () => {
-  const handleNavigateToCourse = useCallback((courseName: string) => {
-    console.log(courseName);
-  }, []);
+  const navigation = useNavigation();
+
+  const handleNavigateToCourse = useCallback(
+    (course_id: number) => {
+      navigation.navigate('LessonsStack', {
+        screen: 'Lessons',
+        params: { course_id },
+      });
+    },
+    [navigation],
+  );
 
   return (
     <Container>
@@ -59,11 +68,8 @@ const Home = () => {
       <CourseList
         courses={LIST_DATA}
         title="Categorias"
-        renderItem={({ item }) => (
-          <CourseCard
-            {...item}
-            onPress={() => handleNavigateToCourse(item.title)}
-          />
+        renderItem={({ item, index }) => (
+          <CourseCard {...item} onPress={() => handleNavigateToCourse(index)} />
         )}
       />
     </Container>

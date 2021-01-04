@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import CourseList from '../../components/CourseList';
@@ -10,9 +11,17 @@ import { Container, Header, SearchInput, SearchInputContainer } from './styles';
 import logoImg from '../../assets/images/logo-small.png';
 
 const MyCourses: React.FC = () => {
-  const handleNavigateToCourse = useCallback((courseName: string) => {
-    console.log(courseName);
-  }, []);
+  const navigation = useNavigation();
+
+  const handleNavigateToCourse = useCallback(
+    (course_id: number) => {
+      navigation.navigate('LessonsStack', {
+        screen: 'Lessons',
+        params: { course_id },
+      });
+    },
+    [navigation],
+  );
 
   return (
     <Container>
@@ -32,11 +41,8 @@ const MyCourses: React.FC = () => {
       <CourseList
         courses={[]}
         title="Cursos Favoritos"
-        renderItem={({ item }) => (
-          <CourseCard
-            {...item}
-            onPress={() => handleNavigateToCourse(item.title)}
-          />
+        renderItem={({ item, index }) => (
+          <CourseCard {...item} onPress={() => handleNavigateToCourse(index)} />
         )}
       />
     </Container>
