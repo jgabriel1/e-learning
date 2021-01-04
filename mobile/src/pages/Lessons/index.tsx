@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import LessonCard from '../../components/LessonCard';
@@ -17,6 +18,17 @@ import {
 import logoImg from '../../assets/images/logo-small.png';
 
 const Lessons: React.FC = () => {
+  const navigation = useNavigation();
+
+  const handleNavigateToLesson = useCallback(
+    (lesson_id: number) => {
+      navigation.navigate('LessonDetail', {
+        lesson_id,
+      });
+    },
+    [navigation],
+  );
+
   return (
     <Container>
       <Header>
@@ -49,7 +61,12 @@ const Lessons: React.FC = () => {
               isCompleted: false,
             },
           ]}
-          renderItem={({ item }) => <LessonCard {...item} />}
+          renderItem={({ item, index }) => (
+            <LessonCard
+              {...item}
+              onPress={() => handleNavigateToLesson(index)}
+            />
+          )}
         />
       </LessonsList>
     </Container>
