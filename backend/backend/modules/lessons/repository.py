@@ -16,7 +16,7 @@ class Lesson(BaseModel):
     description: str
     video_id: str
     course_id: int
-    created_at: datetime
+    created_at: datetime = None
     updated_at: datetime = None
 
 
@@ -61,6 +61,7 @@ class LessonsRepository:
             duration=duration,
             description=description,
             video_id=video_id,
+            course_id=course_id,
         )
 
         return new_lesson
