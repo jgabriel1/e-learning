@@ -17,5 +17,14 @@ class SeleniumClient:
     def find_by_id(self, id: str) -> WebElement:
         return self.client.find_element_by_id(id)
 
+    def query_selector(self, query: str) -> WebElement:
+        return self.client.find_element_by_css_selector(query)
+
     def find_all_by_class(self, _class: str) -> List[WebElement]:
         return self.client.find_elements_by_class_name(_class)
+
+    def query_selector_all(self, query: str) -> List[WebElement]:
+        return self.client.find_elements_by_css_selector(query)
+
+    def close(self):
+        self.client.quit()
