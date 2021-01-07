@@ -13,6 +13,7 @@ databases = "^0.4.1"
 aiosqlite = "^0.16.0"
 selenium = "^3.141.0"
 python-dotenv = "^0.15.0"
+requests = "^2.25.1"
 
 [tool.poetry.scripts]
 dev = "scripts:dev"
