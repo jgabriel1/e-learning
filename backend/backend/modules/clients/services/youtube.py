@@ -4,7 +4,7 @@ from backend.modules.lessons.schemas import CreateNewLessonData
 from fastapi import Depends
 from fastapi.exceptions import HTTPException
 
-from ..selenium_client import SeleniumClient
+from ..providers.selenium_client import SeleniumClient
 
 
 async def create_course_from_youtube_playlist(
@@ -17,6 +17,7 @@ async def create_course_from_youtube_playlist(
     TODO:
         - Need to verify this url somehow. Look for a regex later.
     """
+    raise DeprecationWarning
 
     playlist_url = f"https://www.youtube.com/playlist?list={playlist_id}"
 
