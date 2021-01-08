@@ -1,5 +1,5 @@
 import math
-from typing import AsyncIterable, List
+from typing import Any, AsyncIterable, List
 
 from backend.shared.config import YOUTUBE_API_KEY
 from backend.shared.providers.http_client import HTTPClient, get_http_client
@@ -13,6 +13,9 @@ class YoutubeAPIClient:
 
     def __init__(self, client: HTTPClient = Depends(get_http_client)) -> None:
         self.client = client
+
+    async def get_playlist_info(self, playlist_id: str) -> Any:
+        ...
 
     async def get_playlist_videos(
         self,
@@ -70,10 +73,10 @@ class YoutubeAPIClient:
 
             current_page += 1
 
-    async def get_videos_durations(self, videos: List[PlaylistVideo]) -> None:
+    async def get_videos_durations(self, video_ids: List[str]) -> List[int]:
         """
-        Sets duration for each playlist object by requesting it from the videos
-        endpoint for the YouTube API.
+        Returns a list of durations for each video id passed in the same order using the
+        /videos endpoint in the YouTube API.
 
         TODO:
             - Work on pagination. This version will probably break if there are more
@@ -86,10 +89,9 @@ class YoutubeAPIClient:
             VideosResponse,
             params={
                 "key": YOUTUBE_API_KEY,
-                "id": ",".join(video.videoId for video in videos),
+                "id": ",".join(video_ids),
                 "part": "contentDetails",
             },
         )
 
-        for video, item in zip(videos, response.items):
-            video.duration = item.contentDetails.duration
+        return [item.contentDetails.duration for item in response.items]
