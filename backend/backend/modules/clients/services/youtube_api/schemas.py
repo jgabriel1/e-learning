@@ -1,6 +1,7 @@
 from typing import List
 
-from pydantic import BaseModel
+from metomi.isodatetime.parsers import DurationParser
+from pydantic import BaseModel, validator
 
 
 class PlaylistItemThumbnail(BaseModel):
@@ -42,3 +43,22 @@ class PlaylistVideo(BaseModel):
     description: str
     thumbnailUrl: str
     videoId: str
+    duration: int = None
+
+
+class VideoContentDetails(BaseModel):
+    duration: int
+
+    @validator("duration", pre=True, check_fields=False)
+    def convert_duration_to_minutes(cls, v: str):
+        duration = DurationParser().parse(v)
+
+        return round(duration.get_seconds() / 60)
+
+
+class VideosItem(BaseModel):
+    contentDetails: VideoContentDetails
+
+
+class VideosResponse(BaseModel):
+    items: List[VideosItem]
