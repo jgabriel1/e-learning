@@ -3,6 +3,39 @@ from typing import List
 from metomi.isodatetime.parsers import DurationParser
 from pydantic import BaseModel, validator
 
+# Playlist info
+
+
+class PlaylistInfoDefaultThumbnail(BaseModel):
+    url: str
+
+
+class PlaylistInfoThumbnails(BaseModel):
+    default: PlaylistInfoDefaultThumbnail
+
+
+class PlaylistInfoSnippet(BaseModel):
+    title: str
+    thumbnails: PlaylistInfoThumbnails
+    description: str
+
+
+class PlaylistInfoItem(BaseModel):
+    snippet: PlaylistInfoSnippet
+
+
+class PlaylistInfoResponse(BaseModel):
+    items: List[PlaylistInfoItem]
+
+
+class PlaylistInfo(BaseModel):
+    title: str
+    image_url: str
+    description: str
+
+
+# Playlist item
+
 
 class PlaylistItemThumbnail(BaseModel):
     url: str
@@ -44,6 +77,9 @@ class PlaylistVideo(BaseModel):
     thumbnailUrl: str
     videoId: str
     duration: int = None
+
+
+# Video
 
 
 class VideoContentDetails(BaseModel):

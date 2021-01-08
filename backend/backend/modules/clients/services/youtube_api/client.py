@@ -1,11 +1,17 @@
 import math
-from typing import Any, AsyncIterable, List
+from typing import AsyncIterable, List
 
 from backend.shared.config import YOUTUBE_API_KEY
 from backend.shared.providers.http_client import HTTPClient, get_http_client
 from fastapi.param_functions import Depends
 
-from .schemas import PlaylistItemsResponse, PlaylistVideo, VideosResponse
+from .schemas import (
+    PlaylistInfo,
+    PlaylistInfoResponse,
+    PlaylistItemsResponse,
+    PlaylistVideo,
+    VideosResponse,
+)
 
 
 class YoutubeAPIClient:
@@ -14,8 +20,30 @@ class YoutubeAPIClient:
     def __init__(self, client: HTTPClient = Depends(get_http_client)) -> None:
         self.client = client
 
-    async def get_playlist_info(self, playlist_id: str) -> Any:
-        ...
+    async def get_playlist_info(self, playlist_id: str) -> PlaylistInfo:
+        """
+        Fetches the main info for a given playlist using the /playlists endpoint of the
+        YouTube API.
+        """
+        PLAYLISTS_URL = f"{self.YOUTUBE_API_BASE_URL}playlists"
+
+        response = await self.client.GET(
+            PLAYLISTS_URL,
+            PlaylistInfoResponse,
+            params={
+                "key": YOUTUBE_API_KEY,
+                "id": playlist_id,
+                "part": "snippet",
+            },
+        )
+
+        (playlist_info,) = response.items
+
+        return PlaylistInfo(
+            title=playlist_info.snippet.title,
+            image_url=playlist_info.snippet.thumbnails.default.url,
+            description=playlist_info.snippet.description,
+        )
 
     async def get_playlist_videos(
         self,
