@@ -1,5 +1,6 @@
 from backend.modules.courses.repository import CoursesRepository
 from backend.modules.lessons.repository import LessonsRepository
+from backend.modules.lessons.schemas import CreateNewLessonData
 from fastapi import Depends
 
 from .client import YoutubeAPIClient
@@ -34,15 +35,21 @@ async def create_course_from_youtube_playlist(
         video_ids=[video.videoId for video in videos]
     )
 
-    created_lessons = [
-        await lessons_repository.create(
-            name=video.title,
-            duration=duration,
-            description=video.description,
-            video_id=video.videoId,
-            course_id=created_course.id,
-        )
-        for video, duration in zip(videos, videos_durations)
-    ]
+    created_lessons = await lessons_repository.create_all_for_course(
+        lessons=(
+            CreateNewLessonData(
+                name=video.title,
+                description=video.description,
+                video_id=video.videoId,
+                duration=duration,
+                course_id=created_course.id,
+            )
+            for video, duration in zip(videos, videos_durations)
+        ),
+        course_id=created_course.id,
+    )
 
-    return {"course": created_course, "lessons": created_lessons}
+    return {
+        "course": created_course,
+        "lessons": created_lessons,
+    }
