@@ -1,5 +1,6 @@
 from backend.modules.courses.routes import courses_router
 from backend.modules.lessons.routes import lessons_router
+from backend.modules.clients.routes import clients_router
 from fastapi import FastAPI
 
 from .database.connection import get_database_connection
@@ -21,6 +22,7 @@ class App:
     def register_routes(self) -> None:
         self.app.include_router(courses_router)
         self.app.include_router(lessons_router)
+        self.app.include_router(clients_router)
 
     async def startup(self) -> None:
         self.database_connection.create_tables()
