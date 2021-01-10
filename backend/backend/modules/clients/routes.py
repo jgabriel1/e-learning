@@ -6,7 +6,7 @@ from fastapi import APIRouter
 clients_router = APIRouter()
 
 clients_router.add_api_route(
-    "/youtube/playlist",
+    "/playlist/youtube/{playlist_id}",
     create_course_from_youtube_playlist,
     methods=["POST"],
     status_code=201,
