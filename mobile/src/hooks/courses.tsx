@@ -13,6 +13,7 @@ interface ICourseResponseData {
   id: number;
   name: string;
   image: string;
+  lessons_count: number;
 }
 
 interface ICourseData {
@@ -38,7 +39,7 @@ export const CoursesProvider: React.FC = ({ children }) => {
       return response.data.map(course => ({
         title: course.name,
         imageURL: course.image,
-        lessonsCount: 0,
+        lessonsCount: course.lessons_count,
       }));
     },
   );
