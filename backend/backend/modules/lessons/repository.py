@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Mapping
 
 from backend.shared.database.connection import (
     DatabaseConnection,
@@ -98,3 +98,10 @@ class LessonsRepository:
         )
 
         return parse_obj_as(List[Lesson], lessons)
+
+    async def count_lessons_per_course(self) -> Mapping[int, int]:
+        counts = await self.db.fetch_all(
+            "SELECT course_id, COUNT() AS quantity FROM lessons GROUP BY course_id;",
+        )
+
+        return dict(counts)
