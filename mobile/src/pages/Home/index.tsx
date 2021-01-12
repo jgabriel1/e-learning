@@ -6,11 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useCourses } from '../../hooks/courses';
 
 import CourseList from '../../components/CourseList';
+import CourseCard from '../../components/CourseCard';
 
 import { Container, Header, SearchInputContainer, SearchInput } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
-import CourseCard from '../../components/CourseCard';
 
 const Home: React.FC = () => {
   const { courses } = useCourses();
@@ -45,8 +45,11 @@ const Home: React.FC = () => {
       <CourseList
         courses={courses}
         title="Categorias"
-        renderItem={({ item, index }) => (
-          <CourseCard {...item} onPress={() => handleNavigateToCourse(index)} />
+        renderItem={({ item }) => (
+          <CourseCard
+            {...item}
+            onPress={() => handleNavigateToCourse(item.id)}
+          />
         )}
       />
     </Container>

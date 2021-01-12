@@ -4,6 +4,7 @@ import { ListRenderItem } from 'react-native';
 import { Container, Header, Counter, Title, Content } from './styles';
 
 export interface Course {
+  id: number;
   title: string;
   lessonsCount: number;
   imageURL: string;
@@ -36,7 +37,7 @@ const CourseList: React.FC<CourseListProps> = ({
 
       <Content
         data={courses}
-        keyExtractor={(_, index) => String(index)}
+        keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />

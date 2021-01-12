@@ -17,6 +17,7 @@ interface ICourseResponseData {
 }
 
 interface ICourseData {
+  id: number;
   title: string;
   lessonsCount: number;
   imageURL: string;
@@ -37,6 +38,7 @@ export const CoursesProvider: React.FC = ({ children }) => {
       const response = await api.get<ICourseResponseData[]>(url);
 
       return response.data.map(course => ({
+        id: course.id,
         title: course.name,
         imageURL: course.image,
         lessonsCount: course.lessons_count,
