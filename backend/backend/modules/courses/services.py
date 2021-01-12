@@ -4,13 +4,24 @@ from backend.modules.lessons.repository import LessonsRepository
 from fastapi import Depends, Header, Path, Response
 
 from .repository import CoursesRepository
-from .schemas import CreateNewCourseData, UpdateCourseData
+from .schemas import CreateNewCourseData, ListAllCoursesCourseData, UpdateCourseData
 
 
-async def list_all_courses(courses_repository: CoursesRepository = Depends()):
+async def list_all_courses(
+    courses_repository: CoursesRepository = Depends(),
+    lessons_repository: LessonsRepository = Depends(),
+):
     courses = await courses_repository.findAll()
 
-    return courses
+    lessons_counts = await lessons_repository.count_lessons_per_course()
+
+    return [
+        ListAllCoursesCourseData(
+            **course.dict(),
+            lessons_count=lessons_counts.get(course.id) or 0,
+        )
+        for course in courses
+    ]
 
 
 async def list_lessons_for_course(
