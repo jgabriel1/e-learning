@@ -65,7 +65,6 @@ const CourseList: React.FC<CourseListProps> = ({
             <EmptyView />
           )
         }
-        numColumns={2}
         showsVerticalScrollIndicator={false}
       />
     </Container>

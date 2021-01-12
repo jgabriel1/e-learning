@@ -33,7 +33,7 @@ export const Content = styled(
   FlatList as new () => FlatList<CourseListItem>,
 ).attrs({
   contentContainerStyle: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     justifyContent: 'space-between',
   },
 })``;
