@@ -1,23 +1,12 @@
 import React, { useMemo } from 'react';
 import { ListRenderItem } from 'react-native';
 
-import {
-  Container,
-  Header,
-  Counter,
-  Title,
-  Content,
-  EmptyView,
-} from './styles';
+import { Container, Header, Counter, Title, Content } from './styles';
 
-interface Course {
+export interface Course {
   title: string;
   lessonsCount: number;
   imageURL: string;
-}
-
-export interface CourseListItem extends Course {
-  isLast?: boolean;
 }
 
 interface CourseListProps {
@@ -31,16 +20,6 @@ const CourseList: React.FC<CourseListProps> = ({
   courses,
   renderItem,
 }) => {
-  const coursesList = useMemo(() => {
-    const list: CourseListItem[] = [...courses];
-
-    if (courses.length % 2) {
-      list.push({ title: '', lessonsCount: 0, imageURL: '', isLast: true });
-    }
-
-    return list;
-  }, [courses]);
-
   const coursesCount = useMemo(() => {
     const { length } = courses;
 
@@ -56,15 +35,9 @@ const CourseList: React.FC<CourseListProps> = ({
       </Header>
 
       <Content
-        data={coursesList}
+        data={courses}
         keyExtractor={(_, index) => String(index)}
-        renderItem={({ item, index, separators }) =>
-          !item?.isLast ? (
-            renderItem({ item, index, separators })
-          ) : (
-            <EmptyView />
-          )
-        }
+        renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
     </Container>
