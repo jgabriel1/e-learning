@@ -55,6 +55,6 @@ class CoursesRepository:
         )
 
     async def findAll(self) -> List[Course]:
-        courses = await self.db.fetch_all("SELECT * FORM courses;")
+        courses = await self.db.fetch_all("SELECT * FROM courses;")
 
         return parse_obj_as(List[Course], courses)
