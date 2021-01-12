@@ -9,6 +9,12 @@ import {
   CourseImage,
 } from './styles';
 
+/**
+ * TODO:
+ * Modify items to be only one per row. Since course names are too long, it gets
+ * too cluttered to have two courses per row.
+ */
+
 interface CourseCardProps {
   title: string;
   lessonsCount: number;
