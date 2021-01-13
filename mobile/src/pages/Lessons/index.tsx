@@ -3,6 +3,10 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
+import { useCourseId } from '../../routes/lessons';
+import { useCourse } from '../../hooks/courses';
+import useCourseLessons from './useCourseLessons';
+
 import ReturnButton from '../../components/ReturnButton';
 import LessonCard from '../../components/LessonCard';
 
@@ -19,6 +23,11 @@ import {
 import logoImg from '../../assets/images/logo-small.png';
 
 const Lessons: React.FC = () => {
+  const course_id = useCourseId();
+
+  const course = useCourse(course_id);
+  const { lessons } = useCourseLessons(course_id);
+
   const navigation = useNavigation();
 
   const handleNavigateToLesson = useCallback(
@@ -42,26 +51,13 @@ const Lessons: React.FC = () => {
 
       <LessonsList>
         <LessonsListHeader>
-          <LessonsListTitle>Matemática</LessonsListTitle>
-          <LessonsListCounter>16 aulas</LessonsListCounter>
+          <LessonsListTitle>{course?.title || 'Curso'}</LessonsListTitle>
+          <LessonsListCounter>{course?.lessonsCount || 0}</LessonsListCounter>
         </LessonsListHeader>
 
         <LessonsListContent
-          keyExtractor={(_, index) => String(index)}
-          data={[
-            {
-              name: 'Introdução à teoria matemática',
-              duration: 25,
-              lessonIndex: 1,
-              isCompleted: true,
-            },
-            {
-              name: 'Introdução à teoria matemática',
-              duration: 25,
-              lessonIndex: 2,
-              isCompleted: false,
-            },
-          ]}
+          keyExtractor={item => String(item.id)}
+          data={lessons}
           renderItem={({ item, index }) => (
             <LessonCard
               {...item}

@@ -44,6 +44,7 @@ export const LessonsListCounter = styled.Text`
 
 export const LessonsListContent = styled(
   FlatList as new () => FlatList<{
+    id: number;
     name: string;
     lessonIndex: number;
     duration: number;
