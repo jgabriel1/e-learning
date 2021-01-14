@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import useSWR from 'swr';
 
 import api from '../services/api';
@@ -24,6 +30,9 @@ interface ICourseData {
 
 interface CoursesContextData {
   courses: ICourseData[];
+  selectedCourse: ICourseData | null;
+  setSelectedCourseId: (course_id: number) => void;
+  resetSelectedCourse: () => void;
 }
 
 const CoursesContext = createContext<CoursesContextData>(
@@ -31,6 +40,8 @@ const CoursesContext = createContext<CoursesContextData>(
 );
 
 export const CoursesProvider: React.FC = ({ children }) => {
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+
   const { data: courses } = useSWR<ICourseData[]>(
     'courses',
     async (url: string) => {
@@ -45,10 +56,25 @@ export const CoursesProvider: React.FC = ({ children }) => {
     },
   );
 
+  const resetSelectedCourse = useCallback(() => {
+    setSelectedCourseId(null);
+  }, []);
+
+  const selectedCourse = useMemo(() => {
+    if (!courses || !selectedCourseId) {
+      return null;
+    }
+
+    return courses.find(course => course.id === selectedCourseId) || null;
+  }, [courses, selectedCourseId]);
+
   return (
     <CoursesContext.Provider
       value={{
         courses: courses || [],
+        selectedCourse,
+        setSelectedCourseId,
+        resetSelectedCourse,
       }}
     >
       {children}
@@ -58,14 +84,4 @@ export const CoursesProvider: React.FC = ({ children }) => {
 
 export function useCourses() {
   return useContext(CoursesContext);
-}
-
-export function useCourse(course_id: number) {
-  const { courses } = useContext(CoursesContext);
-
-  const course = useMemo(() => {
-    return courses.find(_course => _course.id === course_id);
-  }, [course_id, courses]);
-
-  return course;
 }
