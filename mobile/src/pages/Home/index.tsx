@@ -13,18 +13,19 @@ import { Container, Header, SearchInputContainer, SearchInput } from './styles';
 import logoImg from '../../assets/images/logo-small.png';
 
 const Home: React.FC = () => {
-  const { courses } = useCourses();
+  const { courses, setSelectedCourseId } = useCourses();
 
   const navigation = useNavigation();
 
   const handleNavigateToCourse = useCallback(
     (course_id: number) => {
+      setSelectedCourseId(course_id);
+
       navigation.navigate('LessonsStack', {
         screen: 'Lessons',
-        params: { course_id },
       });
     },
-    [navigation],
+    [navigation, setSelectedCourseId],
   );
 
   return (

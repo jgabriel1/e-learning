@@ -3,9 +3,7 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
-import { useCourseId } from '../../routes/lessons';
-import { useCourse } from '../../hooks/courses';
-import useCourseLessons from './useCourseLessons';
+import { useCourses } from '../../hooks/courses';
 
 import ReturnButton from '../../components/ReturnButton';
 import LessonCard from '../../components/LessonCard';
@@ -21,22 +19,21 @@ import {
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
+import { useLessons } from '../../hooks/lessons';
 
 const Lessons: React.FC = () => {
-  const course_id = useCourseId();
-
-  const course = useCourse(course_id);
-  const { lessons } = useCourseLessons(course_id);
+  const { selectedCourse: course } = useCourses();
+  const { courseLessons, setSelectedLesson } = useLessons();
 
   const navigation = useNavigation();
 
   const handleNavigateToLesson = useCallback(
     (lesson_id: number) => {
-      navigation.navigate('LessonDetail', {
-        lesson_id,
-      });
+      setSelectedLesson(lesson_id);
+
+      navigation.navigate('LessonDetail');
     },
-    [navigation],
+    [navigation, setSelectedLesson],
   );
 
   return (
@@ -57,11 +54,11 @@ const Lessons: React.FC = () => {
 
         <LessonsListContent
           keyExtractor={item => String(item.id)}
-          data={lessons}
-          renderItem={({ item, index }) => (
+          data={courseLessons}
+          renderItem={({ item }) => (
             <LessonCard
               {...item}
-              onPress={() => handleNavigateToLesson(index)}
+              onPress={() => handleNavigateToLesson(item.id)}
             />
           )}
         />
