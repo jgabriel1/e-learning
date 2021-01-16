@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Iterable, List
+from typing import Iterable, List, Mapping
 
 from backend.shared.database.connection import (
     DatabaseConnection,
