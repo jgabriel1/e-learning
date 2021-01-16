@@ -24,6 +24,7 @@ interface ILessonData {
   description: string;
   lessonIndex: number;
   isCompleted: boolean;
+  videoId: string;
 }
 
 interface LessonsContextData {
@@ -54,6 +55,7 @@ export const LessonsProvider: React.FC = ({ children }) => {
           description: lesson.description,
           lessonIndex: index + 1,
           isCompleted: false,
+          videoId: lesson.video_id,
         };
       });
     },
