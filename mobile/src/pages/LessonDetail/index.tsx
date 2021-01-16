@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
+import { useNavigation } from '@react-navigation/native';
+import { useLessons } from '../../hooks/lessons';
 
 import ReturnButton from '../../components/ReturnButton';
 
@@ -20,13 +23,18 @@ import {
   PreviousLessonButtonText,
   NextLessonButton,
   NextLessonButtonText,
+  PlayButtonPressable,
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
-import { useLessons } from '../../hooks/lessons';
 
 const LessonDetail: React.FC = () => {
   const { selectedLesson: lesson } = useLessons();
+  const navigation = useNavigation();
+
+  const handleNavigateToVideo = useCallback(() => {
+    navigation.navigate('PlayVideo');
+  }, [navigation]);
 
   if (!lesson) {
     return null;
@@ -43,9 +51,11 @@ const LessonDetail: React.FC = () => {
       </Header>
 
       <MainContent>
-        <VideoPlaceholder>
-          <Feather name="play-circle" size={54} color="#fff" />
-        </VideoPlaceholder>
+        <PlayButtonPressable onPress={handleNavigateToVideo}>
+          <VideoPlaceholder>
+            <Feather name="play-circle" size={54} color="#fff" />
+          </VideoPlaceholder>
+        </PlayButtonPressable>
 
         <Title>{lesson.name}</Title>
 

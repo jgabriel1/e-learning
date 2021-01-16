@@ -20,6 +20,8 @@ export const MainContent = styled.View`
   padding: 0 24px;
 `;
 
+export const PlayButtonPressable = styled.TouchableWithoutFeedback``;
+
 export const VideoPlaceholder = styled.View`
   background-color: #3d3d4c;
   border-top-left-radius: 24px;
