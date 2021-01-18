@@ -48,8 +48,18 @@ const Lessons: React.FC = () => {
 
       <LessonsList>
         <LessonsListHeader>
-          <LessonsListTitle>{course?.title || 'Curso'}</LessonsListTitle>
-          <LessonsListCounter>{course?.lessonsCount || 0}</LessonsListCounter>
+          <LessonsListTitle
+            ellipsizeMode="tail"
+            adjustsFontSizeToFit
+            minimumFontScale={0.75}
+            numberOfLines={3}
+          >
+            {course?.title || 'Curso'}
+          </LessonsListTitle>
+
+          <LessonsListCounter>
+            {`${course?.lessonsCount || 0} aulas`}
+          </LessonsListCounter>
         </LessonsListHeader>
 
         <LessonsListContent

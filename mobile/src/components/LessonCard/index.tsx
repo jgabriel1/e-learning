@@ -37,7 +37,14 @@ const LessonCard: React.FC<LessonCardProps> = ({
       <Container>
         <MainContainer>
           <TitleContainer>
-            <Title>{name}</Title>
+            <Title
+              ellipsizeMode="tail"
+              adjustsFontSizeToFit
+              minimumFontScale={0.9}
+              numberOfLines={2}
+            >
+              {name}
+            </Title>
           </TitleContainer>
 
           <BottomContainer>
