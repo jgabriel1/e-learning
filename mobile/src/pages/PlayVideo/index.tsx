@@ -4,8 +4,6 @@ import WebView from 'react-native-webview';
 
 import { useLessons } from '../../hooks/lessons';
 
-import api from '../../services/api';
-
 import { Container } from './styles';
 
 const PlayVideo: React.FC = () => {
@@ -26,7 +24,7 @@ const PlayVideo: React.FC = () => {
         scrollEnabled={false}
         allowsBackForwardNavigationGestures={Platform.OS === 'ios'}
         source={{
-          uri: `${api.defaults.baseURL}/playVideo?videoId=${lesson?.videoId}`,
+          uri: `https://youtube.com/embed/${lesson?.videoId}`,
         }}
       />
     </Container>
