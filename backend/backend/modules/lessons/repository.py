@@ -8,6 +8,7 @@ from backend.shared.database.connection import (
 from fastapi.param_functions import Depends
 from pydantic import BaseModel, parse_obj_as
 
+from .entities import Lesson as LessonDAO
 from .schemas import CreateNewLessonData
 
 
@@ -18,8 +19,12 @@ class Lesson(BaseModel):
     description: str
     video_id: str
     course_id: int
+    thumbnail_url: str
     created_at: datetime = None
     updated_at: datetime = None
+
+    class Config:
+        orm_mode = True
 
 
 class LessonsRepository:
@@ -28,7 +33,6 @@ class LessonsRepository:
         connection: DatabaseConnection = Depends(get_database_connection),
     ) -> None:
         self.db = connection.db
-        self.table = connection.tables.lessons
 
     async def create(
         self,
@@ -38,48 +42,47 @@ class LessonsRepository:
         description: str,
         video_id: str,
         course_id: int,
+        thumbnail_url: str,
     ) -> Lesson:
-        new_lesson_id = await self.db.execute(
-            f"""
-                INSERT INTO
-                    lessons (name, duration, description, video_id, course_id)
-                VALUES
-                    (:name, :duration, :description, :video_id, :course_id);
-            """,
-            {
-                "name": name,
-                "duration": duration,
-                "description": description,
-                "video_id": video_id,
-                "course_id": course_id,
-            },
-        )
-
-        new_lesson = Lesson(
-            id=new_lesson_id,
+        new_lesson = LessonDAO(
             name=name,
             duration=duration,
             description=description,
             video_id=video_id,
             course_id=course_id,
+            thumbnail_url=thumbnail_url,
         )
 
-        return new_lesson
+        self.db.add(new_lesson)
+
+        try:
+            self.db.flush()
+            return Lesson.from_orm(new_lesson)
+        finally:
+            self.db.commit()
 
     async def create_all_for_course(
         self,
         lessons: Iterable[CreateNewLessonData],
         course_id: int,
     ) -> List[Lesson]:
-        await self.db.execute(
-            self.table.insert().values([lesson.dict() for lesson in lessons])
-        )
+        lessons = [
+            LessonDAO(
+                **{
+                    **lesson.dict(),
+                    "course_id": course_id,
+                },
+            )
+            for lesson in lessons
+        ]
 
-        created_lessons = await self.db.fetch_all(
-            self.table.select().where(self.table.c.course_id == course_id)
-        )
+        self.db.add_all(lessons)
 
-        return parse_obj_as(List[Lesson], created_lessons)
+        try:
+            self.db.flush()
+            return parse_obj_as(List[Lesson], lessons)
+        finally:
+            self.db.commit()
 
     async def update_by_id(
         self,
@@ -90,34 +93,32 @@ class LessonsRepository:
         description: str = None,
         video_id: str = None,
     ) -> None:
-        await self.db.execute(
-            self.table.update()
-            .where(self.table.c.id == id)
-            .values(
-                {
-                    key: value
-                    for key, value in {
-                        "name": name,
-                        "duration": duration,
-                        "description": description,
-                        "video_id": video_id,
-                    }.items()
-                    if value is not None
-                }
-            ),
-        )
+        lesson = self.db.query(LessonDAO).filter(LessonDAO.id == id).first()
+
+        if name:
+            lesson.name = name
+
+        if duration:
+            lesson.duration = duration
+
+        if description:
+            lesson.description = description
+
+        if video_id:
+            lesson.video_id = video_id
+
+        self.db.commit()
 
     async def list_by_course_id(self, course_id: int) -> List[Lesson]:
-        lessons = await self.db.fetch_all(
-            "SELECT * FROM lessons WHERE course_id = :course_id",
-            {"course_id": course_id},
+        lessons = (
+            self.db.query(LessonDAO).filter(LessonDAO.course_id == course_id).all()
         )
 
         return parse_obj_as(List[Lesson], lessons)
 
     async def count_lessons_per_course(self) -> Mapping[int, int]:
-        counts = await self.db.fetch_all(
+        counts = self.db.execute(
             "SELECT course_id, COUNT() AS quantity FROM lessons GROUP BY course_id;",
         )
 
-        return dict(counts)
+        return dict(result for result in counts)

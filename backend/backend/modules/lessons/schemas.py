@@ -6,7 +6,8 @@ class CreateNewLessonData(BaseModel):
     duration: int
     description: str
     video_id: str
-    course_id: int
+    thumbnail_url: str
+    course_id: int = None
 
 
 class UpdateLessonData(BaseModel):
@@ -15,3 +16,4 @@ class UpdateLessonData(BaseModel):
     description: str = None
     video_id: str = None
     course_id: int = None
+    thumbnail_url: str = None
