@@ -42,6 +42,7 @@ async def create_course_from_youtube_playlist(
                 description=video.description,
                 video_id=video.videoId,
                 duration=duration,
+                thumbnail_url=video.thumbnailUrl,
                 course_id=created_course.id,
             )
             for video, duration in zip(videos, videos_durations)
