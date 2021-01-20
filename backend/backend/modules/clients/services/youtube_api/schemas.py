@@ -11,7 +11,7 @@ class PlaylistInfoDefaultThumbnail(BaseModel):
 
 
 class PlaylistInfoThumbnails(BaseModel):
-    default: PlaylistInfoDefaultThumbnail
+    standard: PlaylistInfoDefaultThumbnail
 
 
 class PlaylistInfoSnippet(BaseModel):
@@ -42,7 +42,7 @@ class PlaylistItemThumbnail(BaseModel):
 
 
 class PlaylistItemThumbnails(BaseModel):
-    default: PlaylistItemThumbnail
+    standard: PlaylistItemThumbnail
 
 
 class PlaylistItemSnippet(BaseModel):
