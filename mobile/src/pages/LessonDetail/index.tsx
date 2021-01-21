@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -30,12 +30,31 @@ import {
 import logoImg from '../../assets/images/logo-small.png';
 
 const LessonDetail: React.FC = () => {
-  const { selectedLesson: lesson } = useLessons();
+  const {
+    selectedLesson: lesson,
+    setNextLesson,
+    setPreviousLesson,
+  } = useLessons();
+
   const navigation = useNavigation();
 
   const handleNavigateToVideo = useCallback(() => {
     navigation.navigate('PlayVideo');
   }, [navigation]);
+
+  const handleNavigateToPreviousLesson = useCallback(() => {
+    setPreviousLesson();
+  }, [setPreviousLesson]);
+
+  const handleNavigateToNextLesson = useCallback(() => {
+    setNextLesson();
+  }, [setNextLesson]);
+
+  useEffect(() => {
+    if (!lesson) {
+      navigation.navigate('Lessons');
+    }
+  }, [lesson, navigation]);
 
   if (!lesson) {
     return null;
@@ -80,14 +99,14 @@ const LessonDetail: React.FC = () => {
           <Description>{lesson.description}</Description>
 
           <BottomButtonsContainer>
-            <PreviousLessonButton>
+            <PreviousLessonButton onPress={handleNavigateToPreviousLesson}>
               <Feather name="arrow-left" color="#ff6680" size={20} />
 
-              <PreviousLessonButtonText>Aula anterior</PreviousLessonButtonText>
+              <PreviousLessonButtonText>Anterior</PreviousLessonButtonText>
             </PreviousLessonButton>
 
-            <NextLessonButton>
-              <NextLessonButtonText>Próxima aula</NextLessonButtonText>
+            <NextLessonButton onPress={handleNavigateToNextLesson}>
+              <NextLessonButtonText>Próxima</NextLessonButtonText>
 
               <Feather name="arrow-right" color="#ffffff" size={20} />
             </NextLessonButton>

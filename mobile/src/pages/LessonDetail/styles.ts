@@ -87,8 +87,10 @@ export const BottomButtonsContainer = styled.View`
   justify-content: space-between;
 `;
 
-const NavigateLessonButton = styled.View`
-  padding: 18px 24px;
+const NavigateLessonButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.66,
+})`
+  padding: 18px 28px;
   border-radius: 40px;
   flex-direction: row;
   align-items: center;
@@ -111,10 +113,10 @@ const NavigateLessonButtonText = styled.Text`
 
 export const PreviousLessonButtonText = styled(NavigateLessonButtonText)`
   color: #ff6680;
-  margin-left: 8px;
+  margin-left: 20px;
 `;
 
 export const NextLessonButtonText = styled(NavigateLessonButtonText)`
   color: #ffffff;
-  margin-right: 8px;
+  margin-right: 20px;
 `;

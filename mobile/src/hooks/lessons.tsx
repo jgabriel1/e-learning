@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import useSWR from 'swr';
 
 import api from '../services/api';
@@ -29,6 +35,8 @@ interface LessonsContextData {
   courseLessons: ILessonData[];
   selectedLesson: ILessonData | null;
   setSelectedLesson: (lesson_id: number) => void;
+  setNextLesson: () => void;
+  setPreviousLesson: () => void;
 }
 
 const LessonsContext = createContext<LessonsContextData>(
@@ -37,8 +45,6 @@ const LessonsContext = createContext<LessonsContextData>(
 
 export const LessonsProvider: React.FC = ({ children }) => {
   const { selectedCourse: course } = useCourses();
-
-  const [selectedLessonId, setSelectedLesson] = useState<number | null>(null);
 
   const { data: lessons } = useSWR(
     course ? `courses/${course.id}/lessons` : null,
@@ -60,6 +66,8 @@ export const LessonsProvider: React.FC = ({ children }) => {
     },
   );
 
+  const [selectedLessonId, setSelectedLesson] = useState<number | null>(null);
+
   const selectedLesson = useMemo(() => {
     if (!selectedLessonId || !lessons) {
       return null;
@@ -68,12 +76,42 @@ export const LessonsProvider: React.FC = ({ children }) => {
     return lessons.find(lesson => lesson.id === selectedLessonId) || null;
   }, [lessons, selectedLessonId]);
 
+  const setNextLesson = useCallback(() => {
+    setSelectedLesson(() => {
+      if (!selectedLesson) {
+        return null;
+      }
+
+      const nextLesson = lessons?.find(
+        lesson => lesson.lessonIndex === selectedLesson.lessonIndex + 1,
+      );
+
+      return nextLesson?.id || null;
+    });
+  }, [lessons, selectedLesson]);
+
+  const setPreviousLesson = useCallback(() => {
+    setSelectedLesson(() => {
+      if (!selectedLesson) {
+        return null;
+      }
+
+      const nextLesson = lessons?.find(
+        lesson => lesson.lessonIndex === selectedLesson.lessonIndex - 1,
+      );
+
+      return nextLesson?.id || null;
+    });
+  }, [lessons, selectedLesson]);
+
   return (
     <LessonsContext.Provider
       value={{
         courseLessons: lessons || [],
         selectedLesson,
         setSelectedLesson,
+        setPreviousLesson,
+        setNextLesson,
       }}
     >
       {children}
