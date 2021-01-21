@@ -22,10 +22,12 @@ export const MainContent = styled.View`
 
 export const PlayButtonPressable = styled.TouchableWithoutFeedback``;
 
-export const VideoPlaceholder = styled.View`
-  background-color: #3d3d4c;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+export const VideoPlaceholder = styled.ImageBackground.attrs({
+  imageStyle: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+})`
   height: 210px;
   justify-content: center;
   align-items: center;

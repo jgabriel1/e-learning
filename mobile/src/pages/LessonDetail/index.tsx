@@ -52,7 +52,11 @@ const LessonDetail: React.FC = () => {
 
       <MainContent>
         <PlayButtonPressable onPress={handleNavigateToVideo}>
-          <VideoPlaceholder>
+          <VideoPlaceholder
+            source={{ uri: lesson.thumbnail_url }}
+            resizeMode="cover"
+            resizeMethod="resize"
+          >
             <Feather name="play-circle" size={54} color="#fff" />
           </VideoPlaceholder>
         </PlayButtonPressable>
@@ -60,7 +64,9 @@ const LessonDetail: React.FC = () => {
         <Title>{lesson.name}</Title>
 
         <InfoContainer>
-          <Index>Aula 01</Index>
+          <Index>
+            {`Aula ${lesson.lessonIndex.toString().padStart(2, '0')}`}
+          </Index>
 
           <DurationContainer>
             <Feather name="clock" size={16} color="#a0a0b2" />
