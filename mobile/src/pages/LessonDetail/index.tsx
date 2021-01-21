@@ -11,6 +11,7 @@ import {
   Container,
   Header,
   MainContent,
+  MainScrollable,
   VideoPlaceholder,
   Title,
   InfoContainer,
@@ -61,35 +62,37 @@ const LessonDetail: React.FC = () => {
           </VideoPlaceholder>
         </PlayButtonPressable>
 
-        <Title>{lesson.name}</Title>
+        <MainScrollable>
+          <Title>{lesson.name}</Title>
 
-        <InfoContainer>
-          <Index>
-            {`Aula ${lesson.lessonIndex.toString().padStart(2, '0')}`}
-          </Index>
+          <InfoContainer>
+            <Index>
+              {`Aula ${lesson.lessonIndex.toString().padStart(2, '0')}`}
+            </Index>
 
-          <DurationContainer>
-            <Feather name="clock" size={16} color="#a0a0b2" />
+            <DurationContainer>
+              <Feather name="clock" size={16} color="#a0a0b2" />
 
-            <DurationText>{`${lesson.duration} min`}</DurationText>
-          </DurationContainer>
-        </InfoContainer>
+              <DurationText>{`${lesson.duration} min`}</DurationText>
+            </DurationContainer>
+          </InfoContainer>
 
-        <Description>{lesson.description}</Description>
+          <Description>{lesson.description}</Description>
 
-        <BottomButtonsContainer>
-          <PreviousLessonButton>
-            <Feather name="arrow-left" color="#ff6680" size={20} />
+          <BottomButtonsContainer>
+            <PreviousLessonButton>
+              <Feather name="arrow-left" color="#ff6680" size={20} />
 
-            <PreviousLessonButtonText>Aula anterior</PreviousLessonButtonText>
-          </PreviousLessonButton>
+              <PreviousLessonButtonText>Aula anterior</PreviousLessonButtonText>
+            </PreviousLessonButton>
 
-          <NextLessonButton>
-            <NextLessonButtonText>Próxima aula</NextLessonButtonText>
+            <NextLessonButton>
+              <NextLessonButtonText>Próxima aula</NextLessonButtonText>
 
-            <Feather name="arrow-right" color="#ffffff" size={20} />
-          </NextLessonButton>
-        </BottomButtonsContainer>
+              <Feather name="arrow-right" color="#ffffff" size={20} />
+            </NextLessonButton>
+          </BottomButtonsContainer>
+        </MainScrollable>
       </MainContent>
     </Container>
   );

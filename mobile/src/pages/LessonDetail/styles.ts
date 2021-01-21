@@ -17,8 +17,13 @@ export const MainContent = styled.View`
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   background-color: #f0edf5;
-  padding: 0 24px;
 `;
+
+export const MainScrollable = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    padding: 24,
+  },
+})``;
 
 export const PlayButtonPressable = styled.TouchableWithoutFeedback``;
 
@@ -31,8 +36,6 @@ export const VideoPlaceholder = styled.ImageBackground.attrs({
   height: 210px;
   justify-content: center;
   align-items: center;
-
-  margin: 0 -24px 24px;
 `;
 
 export const Title = styled.Text`
