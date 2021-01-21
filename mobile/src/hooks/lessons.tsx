@@ -2,13 +2,13 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useMemo,
-  useState,
+  useReducer,
 } from 'react';
 import useSWR from 'swr';
 
-import api from '../services/api';
 import { useCourses } from './courses';
+
+import api from '../services/api';
 
 interface ILessonResponseData {
   id: number;
@@ -39,6 +39,13 @@ interface LessonsContextData {
   setPreviousLesson: () => void;
 }
 
+type SelectedLessonReducer = React.Reducer<
+  { selectedLesson: ILessonData | null },
+  | { type: 'SET_ID'; id: number }
+  | { type: 'SET_NEXT' }
+  | { type: 'SET_PREVIOUS' }
+>;
+
 const LessonsContext = createContext<LessonsContextData>(
   {} as LessonsContextData,
 );
@@ -66,43 +73,66 @@ export const LessonsProvider: React.FC = ({ children }) => {
     },
   );
 
-  const [selectedLessonId, setSelectedLesson] = useState<number | null>(null);
+  const [
+    { selectedLesson },
+    selectedLessonDispatch,
+  ] = useReducer<SelectedLessonReducer>(
+    (state, action) => {
+      switch (action.type) {
+        case 'SET_ID': {
+          const selected = lessons?.find(lesson => lesson.id === action.id);
 
-  const selectedLesson = useMemo(() => {
-    if (!selectedLessonId || !lessons) {
-      return null;
-    }
+          return {
+            ...state,
+            selectedLesson: selected || null,
+          };
+        }
+        case 'SET_NEXT': {
+          const nextLessonIndex = state.selectedLesson
+            ? state.selectedLesson.lessonIndex + 1
+            : -1;
 
-    return lessons.find(lesson => lesson.id === selectedLessonId) || null;
-  }, [lessons, selectedLessonId]);
+          const next = lessons?.find(
+            lesson => lesson.lessonIndex === nextLessonIndex,
+          );
+
+          return {
+            ...state,
+            selectedLesson: next || null,
+          };
+        }
+        case 'SET_PREVIOUS': {
+          const previousLessonIndex = state.selectedLesson
+            ? state.selectedLesson.lessonIndex - 1
+            : -1;
+
+          const previous = lessons?.find(
+            lesson => lesson.lessonIndex === previousLessonIndex,
+          );
+
+          return {
+            ...state,
+            selectedLesson: previous || null,
+          };
+        }
+        default:
+          return state;
+      }
+    },
+    { selectedLesson: null },
+  );
+
+  const setSelectedLesson = useCallback((lesson_id: number) => {
+    selectedLessonDispatch({ type: 'SET_ID', id: lesson_id });
+  }, []);
 
   const setNextLesson = useCallback(() => {
-    setSelectedLesson(() => {
-      if (!selectedLesson) {
-        return null;
-      }
-
-      const nextLesson = lessons?.find(
-        lesson => lesson.lessonIndex === selectedLesson.lessonIndex + 1,
-      );
-
-      return nextLesson?.id || null;
-    });
-  }, [lessons, selectedLesson]);
+    selectedLessonDispatch({ type: 'SET_NEXT' });
+  }, []);
 
   const setPreviousLesson = useCallback(() => {
-    setSelectedLesson(() => {
-      if (!selectedLesson) {
-        return null;
-      }
-
-      const nextLesson = lessons?.find(
-        lesson => lesson.lessonIndex === selectedLesson.lessonIndex - 1,
-      );
-
-      return nextLesson?.id || null;
-    });
-  }, [lessons, selectedLesson]);
+    selectedLessonDispatch({ type: 'SET_PREVIOUS' });
+  }, []);
 
   return (
     <LessonsContext.Provider
