@@ -4,17 +4,14 @@ import useSWR from 'swr';
 import api from '../services/api';
 import { useCourses } from './courses';
 
-/**
- * TODO BACKEND:
- * Add lesson index in the backend, the order could change within the database.
- */
-
 interface ILessonResponseData {
   id: number;
   name: string;
   duration: number;
   description: string;
   video_id: string;
+  thumbnail_url: string;
+  lesson_index: number;
 }
 
 interface ILessonData {
@@ -23,6 +20,7 @@ interface ILessonData {
   duration: number;
   description: string;
   lessonIndex: number;
+  thumbnail_url: string;
   isCompleted: boolean;
   videoId: string;
 }
@@ -47,15 +45,16 @@ export const LessonsProvider: React.FC = ({ children }) => {
     async (url: string) => {
       const response = await api.get<ILessonResponseData[]>(url);
 
-      return response.data.map((lesson, index) => {
+      return response.data.map(lesson => {
         return {
           id: lesson.id,
           name: lesson.name,
           duration: lesson.duration,
           description: lesson.description,
-          lessonIndex: index + 1,
-          isCompleted: false,
+          lessonIndex: lesson.lesson_index,
           videoId: lesson.video_id,
+          thumbnail_url: lesson.thumbnail_url,
+          isCompleted: false,
         };
       });
     },
