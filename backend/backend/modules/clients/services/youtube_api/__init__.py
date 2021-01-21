@@ -12,10 +12,6 @@ async def create_course_from_youtube_playlist(
     courses_repository: CoursesRepository = Depends(),
     lessons_repository: LessonsRepository = Depends(),
 ):
-    """
-    TODO:
-        - Refactor when the create_many method is implemented in the lessons repository.
-    """
     playlist_info = await youtube.get_playlist_info(playlist_id)
 
     created_course = await courses_repository.create(
@@ -43,9 +39,15 @@ async def create_course_from_youtube_playlist(
                 video_id=video.videoId,
                 duration=duration,
                 thumbnail_url=video.thumbnailUrl,
+                lesson_index=index + 1,
                 course_id=created_course.id,
             )
-            for video, duration in zip(videos, videos_durations)
+            for index, (video, duration) in enumerate(
+                zip(
+                    videos,
+                    videos_durations,
+                )
+            )
         ),
         course_id=created_course.id,
     )

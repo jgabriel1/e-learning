@@ -10,4 +10,5 @@ class Lesson(DeclarativeBase):
     description = Column(String(200), nullable=False)
     video_id = Column(String)
     thumbnail_url = Column(String)
+    lesson_index = Column(Integer, nullable=True)
     course_id = Column(Integer, ForeignKey("courses.id"))

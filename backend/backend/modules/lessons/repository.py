@@ -19,6 +19,7 @@ class Lesson(BaseModel):
     description: str
     video_id: str
     course_id: int
+    lesson_index: int
     thumbnail_url: str
     created_at: datetime = None
     updated_at: datetime = None
@@ -43,6 +44,7 @@ class LessonsRepository:
         video_id: str,
         course_id: int,
         thumbnail_url: str,
+        lesson_index: int,
     ) -> Lesson:
         new_lesson = LessonDAO(
             name=name,
@@ -51,6 +53,7 @@ class LessonsRepository:
             video_id=video_id,
             course_id=course_id,
             thumbnail_url=thumbnail_url,
+            lesson_index=lesson_index,
         )
 
         self.db.add(new_lesson)
