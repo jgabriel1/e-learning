@@ -41,7 +41,7 @@ class YoutubeAPIClient:
 
         return PlaylistInfo(
             title=playlist_info.snippet.title,
-            image_url=playlist_info.snippet.thumbnails.default.url,
+            image_url=playlist_info.snippet.thumbnails.standard.url,
             description=playlist_info.snippet.description,
         )
 
@@ -81,7 +81,7 @@ class YoutubeAPIClient:
                 yield PlaylistVideo(
                     title=item.snippet.title,
                     description=item.snippet.description,
-                    thumbnailUrl=item.snippet.thumbnails.default.url,
+                    thumbnailUrl=item.snippet.thumbnails.standard.url,
                     videoId=item.contentDetails.videoId,
                 )
 

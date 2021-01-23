@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  width: 100%;
   background-color: #6548a3;
 `;
 
@@ -25,13 +24,15 @@ export const LessonsListHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  height: 64px;
 `;
 
 export const LessonsListTitle = styled.Text`
   font-family: ${'rubik400'};
   font-size: 30px;
-  line-height: 36px;
   color: #3d3d4c;
+  flex: 1;
+  max-height: 100px;
 `;
 
 export const LessonsListCounter = styled.Text`
@@ -40,10 +41,12 @@ export const LessonsListCounter = styled.Text`
   line-height: 18px;
   color: #a0a0b2;
   text-align: right;
+  margin-left: 8px;
 `;
 
 export const LessonsListContent = styled(
   FlatList as new () => FlatList<{
+    id: number;
     name: string;
     lessonIndex: number;
     duration: number;

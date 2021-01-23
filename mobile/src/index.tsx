@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { Rubik_400Regular } from '@expo-google-fonts/rubik';
 import { Roboto_400Regular, Roboto_500Medium } from '@expo-google-fonts/roboto';
 
+import AppProvider from './hooks';
 import Router from './routes';
 
 const App: React.FC = () => {
@@ -17,10 +18,10 @@ const App: React.FC = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
       {fontsLoaded ? (
-        <>
+        <AppProvider>
           <StatusBar style="light" />
           <Router />
-        </>
+        </AppProvider>
       ) : (
         <ActivityIndicator />
       )}

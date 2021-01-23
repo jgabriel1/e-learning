@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
 
-import { CourseListItem } from '.';
+import { Course } from '.';
 
 export const Container = styled.View`
   flex: 1;
@@ -29,19 +29,9 @@ export const Counter = styled.Text`
   font-size: 15px;
 `;
 
-export const Content = styled(
-  FlatList as new () => FlatList<CourseListItem>,
-).attrs({
+export const Content = styled(FlatList as new () => FlatList<Course>).attrs({
   contentContainerStyle: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     justifyContent: 'space-between',
   },
 })``;
-
-export const EmptyView = styled.View`
-  height: 172px;
-  border-radius: 16px;
-  margin: 0 8px 18px 8px;
-  flex-grow: 1;
-  flex-basis: 0;
-`;

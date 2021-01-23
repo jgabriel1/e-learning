@@ -6,7 +6,7 @@ export const Container = styled.View`
   background-color: #fff;
   height: 172px;
   border-radius: 16px;
-  margin: 0 8px 18px 8px;
+  margin-bottom: 18px;
   flex-grow: 1;
   flex-basis: 0;
 `;

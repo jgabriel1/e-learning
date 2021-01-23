@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
+import { useNavigation } from '@react-navigation/native';
+import { useLessons } from '../../hooks/lessons';
 
 import ReturnButton from '../../components/ReturnButton';
 
@@ -8,6 +11,7 @@ import {
   Container,
   Header,
   MainContent,
+  MainScrollable,
   VideoPlaceholder,
   Title,
   InfoContainer,
@@ -20,11 +24,42 @@ import {
   PreviousLessonButtonText,
   NextLessonButton,
   NextLessonButtonText,
+  PlayButtonPressable,
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
 
 const LessonDetail: React.FC = () => {
+  const {
+    selectedLesson: lesson,
+    setNextLesson,
+    setPreviousLesson,
+  } = useLessons();
+
+  const navigation = useNavigation();
+
+  const handleNavigateToVideo = useCallback(() => {
+    navigation.navigate('PlayVideo');
+  }, [navigation]);
+
+  const handleNavigateToPreviousLesson = useCallback(() => {
+    setPreviousLesson();
+  }, [setPreviousLesson]);
+
+  const handleNavigateToNextLesson = useCallback(() => {
+    setNextLesson();
+  }, [setNextLesson]);
+
+  useEffect(() => {
+    if (!lesson) {
+      navigation.navigate('Lessons');
+    }
+  }, [lesson, navigation]);
+
+  if (!lesson) {
+    return null;
+  }
+
   return (
     <Container>
       <Header>
@@ -36,43 +71,47 @@ const LessonDetail: React.FC = () => {
       </Header>
 
       <MainContent>
-        <VideoPlaceholder>
-          <Feather name="play-circle" size={54} color="#fff" />
-        </VideoPlaceholder>
+        <PlayButtonPressable onPress={handleNavigateToVideo}>
+          <VideoPlaceholder
+            source={{ uri: lesson.thumbnail_url }}
+            resizeMode="cover"
+            resizeMethod="resize"
+          >
+            <Feather name="play-circle" size={54} color="#fff" />
+          </VideoPlaceholder>
+        </PlayButtonPressable>
 
-        <Title>Introdução à teoria matemática</Title>
+        <MainScrollable>
+          <Title>{lesson.name}</Title>
 
-        <InfoContainer>
-          <Index>Aula 01</Index>
+          <InfoContainer>
+            <Index>
+              {`Aula ${lesson.lessonIndex.toString().padStart(2, '0')}`}
+            </Index>
 
-          <DurationContainer>
-            <Feather name="clock" size={16} color="#a0a0b2" />
+            <DurationContainer>
+              <Feather name="clock" size={16} color="#a0a0b2" />
 
-            <DurationText>5 min</DurationText>
-          </DurationContainer>
-        </InfoContainer>
+              <DurationText>{`${lesson.duration} min`}</DurationText>
+            </DurationContainer>
+          </InfoContainer>
 
-        <Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi laoreet
-          a sapien at dapibus. Quisque hendrerit blandit tellus, aliquet
-          vehicula ligula ultricies vitae. Nam at diam at nulla iaculis gravida
-          quis ut ipsum. Pellentesque tincidunt risus vitae faucibus rutrum.
-          Mauris arcu libero, blandit et vestibulum eu, semper vel eros.
-        </Description>
+          <Description>{lesson.description}</Description>
 
-        <BottomButtonsContainer>
-          <PreviousLessonButton>
-            <Feather name="arrow-left" color="#ff6680" size={20} />
+          <BottomButtonsContainer>
+            <PreviousLessonButton onPress={handleNavigateToPreviousLesson}>
+              <Feather name="arrow-left" color="#ff6680" size={20} />
 
-            <PreviousLessonButtonText>Aula anterior</PreviousLessonButtonText>
-          </PreviousLessonButton>
+              <PreviousLessonButtonText>Anterior</PreviousLessonButtonText>
+            </PreviousLessonButton>
 
-          <NextLessonButton>
-            <NextLessonButtonText>Próxima aula</NextLessonButtonText>
+            <NextLessonButton onPress={handleNavigateToNextLesson}>
+              <NextLessonButtonText>Próxima</NextLessonButtonText>
 
-            <Feather name="arrow-right" color="#ffffff" size={20} />
-          </NextLessonButton>
-        </BottomButtonsContainer>
+              <Feather name="arrow-right" color="#ffffff" size={20} />
+            </NextLessonButton>
+          </BottomButtonsContainer>
+        </MainScrollable>
       </MainContent>
     </Container>
   );

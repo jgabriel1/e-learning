@@ -3,6 +3,8 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
+import { useCourses } from '../../hooks/courses';
+
 import ReturnButton from '../../components/ReturnButton';
 import LessonCard from '../../components/LessonCard';
 
@@ -17,17 +19,21 @@ import {
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
+import { useLessons } from '../../hooks/lessons';
 
 const Lessons: React.FC = () => {
+  const { selectedCourse: course } = useCourses();
+  const { courseLessons, setSelectedLesson } = useLessons();
+
   const navigation = useNavigation();
 
   const handleNavigateToLesson = useCallback(
     (lesson_id: number) => {
-      navigation.navigate('LessonDetail', {
-        lesson_id,
-      });
+      setSelectedLesson(lesson_id);
+
+      navigation.navigate('LessonDetail');
     },
-    [navigation],
+    [navigation, setSelectedLesson],
   );
 
   return (
@@ -42,30 +48,27 @@ const Lessons: React.FC = () => {
 
       <LessonsList>
         <LessonsListHeader>
-          <LessonsListTitle>Matemática</LessonsListTitle>
-          <LessonsListCounter>16 aulas</LessonsListCounter>
+          <LessonsListTitle
+            ellipsizeMode="tail"
+            adjustsFontSizeToFit
+            minimumFontScale={0.75}
+            numberOfLines={3}
+          >
+            {course?.title || 'Curso'}
+          </LessonsListTitle>
+
+          <LessonsListCounter>
+            {`${course?.lessonsCount || 0} aulas`}
+          </LessonsListCounter>
         </LessonsListHeader>
 
         <LessonsListContent
-          keyExtractor={(_, index) => String(index)}
-          data={[
-            {
-              name: 'Introdução à teoria matemática',
-              duration: 25,
-              lessonIndex: 1,
-              isCompleted: true,
-            },
-            {
-              name: 'Introdução à teoria matemática',
-              duration: 25,
-              lessonIndex: 2,
-              isCompleted: false,
-            },
-          ]}
-          renderItem={({ item, index }) => (
+          keyExtractor={item => String(item.id)}
+          data={courseLessons}
+          renderItem={({ item }) => (
             <LessonCard
               {...item}
-              onPress={() => handleNavigateToLesson(index)}
+              onPress={() => handleNavigateToLesson(item.id)}
             />
           )}
         />

@@ -17,18 +17,25 @@ export const MainContent = styled.View`
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   background-color: #f0edf5;
-  padding: 0 24px;
 `;
 
-export const VideoPlaceholder = styled.View`
-  background-color: #3d3d4c;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+export const MainScrollable = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    padding: 24,
+  },
+})``;
+
+export const PlayButtonPressable = styled.TouchableWithoutFeedback``;
+
+export const VideoPlaceholder = styled.ImageBackground.attrs({
+  imageStyle: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+})`
   height: 210px;
   justify-content: center;
   align-items: center;
-
-  margin: 0 -24px 24px;
 `;
 
 export const Title = styled.Text`
@@ -80,8 +87,10 @@ export const BottomButtonsContainer = styled.View`
   justify-content: space-between;
 `;
 
-const NavigateLessonButton = styled.View`
-  padding: 18px 24px;
+const NavigateLessonButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.66,
+})`
+  padding: 18px 28px;
   border-radius: 40px;
   flex-direction: row;
   align-items: center;
@@ -104,10 +113,10 @@ const NavigateLessonButtonText = styled.Text`
 
 export const PreviousLessonButtonText = styled(NavigateLessonButtonText)`
   color: #ff6680;
-  margin-left: 8px;
+  margin-left: 20px;
 `;
 
 export const NextLessonButtonText = styled(NavigateLessonButtonText)`
   color: #ffffff;
-  margin-right: 8px;
+  margin-right: 20px;
 `;

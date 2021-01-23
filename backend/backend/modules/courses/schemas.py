@@ -1,4 +1,9 @@
+from backend.modules.courses.repository import Course
 from pydantic import BaseModel
+
+
+class ListAllCoursesCourseData(Course):
+    lessons_count: int
 
 
 class CreateNewCourseData(BaseModel):
