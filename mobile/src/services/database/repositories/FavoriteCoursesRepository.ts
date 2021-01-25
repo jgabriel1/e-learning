@@ -17,6 +17,12 @@ export class FavoriteCoursesRepository {
     return !!favorite;
   }
 
+  public async listAll(): Promise<FavoriteCourse[]> {
+    const favorites = await this.repository.find();
+
+    return favorites;
+  }
+
   public async create(course_id: ID): Promise<FavoriteCourse> {
     const favorite = this.repository.create({ course_id });
 
