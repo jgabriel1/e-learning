@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useMemo } from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { View, Text } from 'react-native';
 import useSWR from 'swr';
 
@@ -7,6 +7,7 @@ import { FavoriteCoursesRepository } from '../services/database/repositories/Fav
 
 interface FavoritesContextData {
   favoriteCoursesIds: Set<number>;
+  loadFavorites: () => void;
   checkFavorite: (course_id: number) => Promise<boolean>;
   toggleFavorite: (course_id: number) => Promise<void>;
 }
@@ -22,8 +23,14 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     return new FavoriteCoursesRepository(connection);
   }, [connection]);
 
+  const [shouldLoadfavorites, setShouldLoadFavorites] = useState(false);
+
+  const loadFavorites = useCallback(() => {
+    setShouldLoadFavorites(true);
+  }, []);
+
   const { data: favoriteCoursesIds, mutate: mutateFavorites } = useSWR(
-    'database/favorite-courses',
+    shouldLoadfavorites ? 'database/favorite-courses' : null,
     async () => {
       const favorites = await favoritesRepository.listAll();
 
@@ -35,18 +42,17 @@ export const FavoritesProvider: React.FC = ({ children }) => {
 
       return favoritesIds;
     },
-    {
-      initialData: new Set(),
-    },
   );
 
   const checkFavorite = useCallback(
     async (course_id: number) => {
-      const isInFavorites = favoriteCoursesIds?.has(course_id);
+      if (favoriteCoursesIds) {
+        return !!favoriteCoursesIds?.has(course_id);
+      }
 
-      return !!isInFavorites;
+      return favoritesRepository.existsByCourseId(course_id);
     },
-    [favoriteCoursesIds],
+    [favoriteCoursesIds, favoritesRepository],
   );
 
   const toggleFavorite = useCallback(
@@ -82,7 +88,12 @@ export const FavoritesProvider: React.FC = ({ children }) => {
 
   return (
     <FavoritesContext.Provider
-      value={{ favoriteCoursesIds, checkFavorite, toggleFavorite }}
+      value={{
+        favoriteCoursesIds,
+        loadFavorites,
+        checkFavorite,
+        toggleFavorite,
+      }}
     >
       {children}
     </FavoritesContext.Provider>
