@@ -2,11 +2,27 @@ import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { View, Text } from 'react-native';
 import useSWR from 'swr';
 
+import api from '../services/api';
 import { useDatabaseConnection } from './database';
 import { FavoriteCoursesRepository } from '../services/database/repositories/FavoriteCoursesRepository';
 
+interface ICourseResponseData {
+  id: number;
+  name: string;
+  image: string;
+  lessons_count: number;
+}
+
+interface ICourseData {
+  id: number;
+  title: string;
+  lessonsCount: number;
+  imageURL: string;
+}
+
 interface FavoritesContextData {
   favoriteCoursesIds: Set<number>;
+  favoriteCourses: ICourseData[];
   loadFavorites: () => void;
   checkFavorite: (course_id: number) => Promise<boolean>;
   toggleFavorite: (course_id: number) => Promise<void>;
@@ -29,7 +45,7 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     setShouldLoadFavorites(true);
   }, []);
 
-  const { data: favoriteCoursesIds, mutate: mutateFavorites } = useSWR(
+  const { data: favoriteCoursesIds, mutate: mutateFavoritesIds } = useSWR(
     shouldLoadfavorites ? 'database/favorite-courses' : null,
     async () => {
       const favorites = await favoritesRepository.listAll();
@@ -41,6 +57,26 @@ export const FavoritesProvider: React.FC = ({ children }) => {
       console.log('loaded favorites');
 
       return favoritesIds;
+    },
+  );
+
+  const { data: favoriteCourses } = useSWR<ICourseData[]>(
+    favoriteCoursesIds ? ['courses/list', favoriteCoursesIds] : null,
+    async (url: string, course_ids: Set<number>) => {
+      const ids = Array.from(course_ids);
+
+      const response = await api.post<ICourseResponseData[]>(url, {
+        courses: ids,
+      });
+
+      console.log('fetched favorites data');
+
+      return response.data.map(course => ({
+        id: course.id,
+        title: course.name,
+        imageURL: course.image,
+        lessonsCount: course.lessons_count,
+      }));
     },
   );
 
@@ -71,12 +107,17 @@ export const FavoritesProvider: React.FC = ({ children }) => {
         favoritesState.delete(course_id);
       }
 
-      mutateFavorites(favoritesState, true);
+      mutateFavoritesIds(favoritesState, true);
     },
-    [checkFavorite, favoriteCoursesIds, favoritesRepository, mutateFavorites],
+    [
+      checkFavorite,
+      favoriteCoursesIds,
+      favoritesRepository,
+      mutateFavoritesIds,
+    ],
   );
 
-  if (!favoriteCoursesIds) {
+  if (shouldLoadfavorites && !favoriteCoursesIds) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontFamily: 'roboto500', fontSize: 20 }}>
@@ -89,7 +130,8 @@ export const FavoritesProvider: React.FC = ({ children }) => {
   return (
     <FavoritesContext.Provider
       value={{
-        favoriteCoursesIds,
+        favoriteCoursesIds: favoriteCoursesIds || new Set(),
+        favoriteCourses: favoriteCourses || [],
         loadFavorites,
         checkFavorite,
         toggleFavorite,
