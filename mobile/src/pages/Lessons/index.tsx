@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
 
 import { useCourses } from '../../hooks/courses';
 
 import ReturnButton from '../../components/ReturnButton';
+import FavoriteButton from '../../components/FavoriteButton';
 import LessonCard from '../../components/LessonCard';
 
 import {
@@ -16,6 +16,7 @@ import {
   LessonsListHeader,
   LessonsListTitle,
   LessonsListContent,
+  EmptyView,
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
@@ -43,7 +44,7 @@ const Lessons: React.FC = () => {
 
         <Image source={logoImg} />
 
-        <Feather name="heart" size={24} color="#FF6680" />
+        {course ? <FavoriteButton course_id={course?.id} /> : <EmptyView />}
       </Header>
 
       <LessonsList>

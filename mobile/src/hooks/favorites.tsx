@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import { View, Text } from 'react-native';
 import useSWR from 'swr';
 
@@ -141,3 +147,7 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     </FavoritesContext.Provider>
   );
 };
+
+export function useFavoriteCourses() {
+  return useContext(FavoritesContext);
+}

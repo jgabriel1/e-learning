@@ -58,3 +58,5 @@ export const LessonsListContent = styled(
     justifyContent: 'space-between',
   },
 })``;
+
+export const EmptyView = styled.View``;
