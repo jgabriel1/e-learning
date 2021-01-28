@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { View, Text } from 'react-native';
 import useSWR from 'swr';
 
 import { useDatabaseConnection } from './database';
@@ -77,7 +76,6 @@ export const FavoritesProvider: React.FC = ({ children }) => {
         lessonsCount: course.lessons_count,
       }));
     },
-    {},
   );
 
   const checkFavorite = useCallback(
@@ -109,16 +107,6 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     },
     [checkFavorite, favoritesRepository, mutateFavoritesIds],
   );
-
-  if (shouldLoadfavorites && !favoriteCoursesIds) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontFamily: 'roboto500', fontSize: 20 }}>
-          Loading favorites...
-        </Text>
-      </View>
-    );
-  }
 
   return (
     <FavoritesContext.Provider
