@@ -8,9 +8,10 @@ import React, {
 import { View, Text } from 'react-native';
 import useSWR from 'swr';
 
-import api from '../services/api';
 import { useDatabaseConnection } from './database';
+
 import { FavoriteCoursesRepository } from '../services/database/repositories/FavoriteCoursesRepository';
+import api from '../services/api';
 
 interface ICourseResponseData {
   id: number;
@@ -27,7 +28,7 @@ interface ICourseData {
 }
 
 interface FavoritesContextData {
-  favoriteCoursesIds: Set<number>;
+  favoriteCoursesIds: number[];
   favoriteCourses: ICourseData[];
   loadFavorites: () => void;
   checkFavorite: (course_id: number) => Promise<boolean>;
@@ -56,11 +57,7 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     async () => {
       const favorites = await favoritesRepository.listAll();
 
-      const favoritesIds = new Set(
-        favorites.map(favorite => favorite.course_id),
-      );
-
-      console.log('loaded favorites');
+      const favoritesIds = favorites.map(favorite => favorite.course_id);
 
       return favoritesIds;
     },
@@ -69,13 +66,9 @@ export const FavoritesProvider: React.FC = ({ children }) => {
   const { data: favoriteCourses } = useSWR<ICourseData[]>(
     favoriteCoursesIds ? ['courses/list', favoriteCoursesIds] : null,
     async (url: string, course_ids: Set<number>) => {
-      const ids = Array.from(course_ids);
-
       const response = await api.post<ICourseResponseData[]>(url, {
-        courses: ids,
+        courses: course_ids,
       });
-
-      console.log('fetched favorites data');
 
       return response.data.map(course => ({
         id: course.id,
@@ -84,12 +77,13 @@ export const FavoritesProvider: React.FC = ({ children }) => {
         lessonsCount: course.lessons_count,
       }));
     },
+    {},
   );
 
   const checkFavorite = useCallback(
     async (course_id: number) => {
       if (favoriteCoursesIds) {
-        return !!favoriteCoursesIds?.has(course_id);
+        return !!favoriteCoursesIds?.includes(course_id);
       }
 
       return favoritesRepository.existsByCourseId(course_id);
@@ -99,28 +93,21 @@ export const FavoritesProvider: React.FC = ({ children }) => {
 
   const toggleFavorite = useCallback(
     async (course_id: number) => {
-      const favoritesState = new Set(favoriteCoursesIds);
-
       const isFavorite = await checkFavorite(course_id);
 
       if (!isFavorite) {
         await favoritesRepository.create(course_id);
 
-        favoritesState.add(course_id);
+        mutateFavoritesIds(current => current && [...current, course_id]);
       } else {
         await favoritesRepository.delete(course_id);
 
-        favoritesState.delete(course_id);
+        mutateFavoritesIds(
+          current => current && current.filter(id => id !== course_id),
+        );
       }
-
-      mutateFavoritesIds(favoritesState, true);
     },
-    [
-      checkFavorite,
-      favoriteCoursesIds,
-      favoritesRepository,
-      mutateFavoritesIds,
-    ],
+    [checkFavorite, favoritesRepository, mutateFavoritesIds],
   );
 
   if (shouldLoadfavorites && !favoriteCoursesIds) {
@@ -136,7 +123,7 @@ export const FavoritesProvider: React.FC = ({ children }) => {
   return (
     <FavoritesContext.Provider
       value={{
-        favoriteCoursesIds: favoriteCoursesIds || new Set(),
+        favoriteCoursesIds: favoriteCoursesIds || [],
         favoriteCourses: favoriteCourses || [],
         loadFavorites,
         checkFavorite,
