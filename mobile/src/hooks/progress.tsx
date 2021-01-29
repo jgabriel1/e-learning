@@ -35,7 +35,7 @@ export const ProgressProvider: React.FC = ({ children }) => {
     async (_, course_id: number) => {
       const courseProgress = await progressRepository.findByCourseId(course_id);
 
-      return new Set(courseProgress.map(lesson => lesson.course_lesson_index));
+      return courseProgress.map(lesson => lesson.course_lesson_index);
     },
   );
 
@@ -51,17 +51,22 @@ export const ProgressProvider: React.FC = ({ children }) => {
         course_lesson_index,
       });
 
-      mutateCompletedLessons(current => {
-        return new Set(current).add(course_lesson_index);
-      }, true);
+      mutateCompletedLessons(
+        current => current && [...current, course_lesson_index],
+        true,
+      );
     },
     [mutateCompletedLessons, progressRepository, selectedCourse],
   );
 
+  const completedLessons = useMemo(() => {
+    return new Set(completedLessonIndexes);
+  }, [completedLessonIndexes]);
+
   return (
     <ProgressContext.Provider
       value={{
-        completedLessonIndexes: completedLessonIndexes || new Set(),
+        completedLessonIndexes: completedLessons || new Set(),
         completeLesson,
       }}
     >
