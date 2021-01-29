@@ -9,7 +9,7 @@ import useSWR from 'swr';
 
 import { useDatabaseConnection } from './database';
 
-import { FavoriteCoursesRepository } from '../services/database/repositories/FavoriteCoursesRepository';
+import { FavoriteCoursesRepository } from '../services/database/repositories';
 import api from '../services/api';
 
 interface ICourseResponseData {

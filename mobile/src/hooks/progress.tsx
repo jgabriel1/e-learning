@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { useCourses } from './courses';
 import { useDatabaseConnection } from './database';
 
-import { CourseProgressRepository } from '../services/database/repositories/CourseProgressRepository';
+import { CourseProgressRepository } from '../services/database/repositories';
 
 interface CompleteLessonData {
   lesson_id: number;
