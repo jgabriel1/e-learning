@@ -1,13 +1,10 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useContext, useMemo } from 'react';
 import useSWR from 'swr';
-import { CourseProgressRepository } from '../services/database/repositories/CourseProgressRepository';
+
+import { useCourses } from './courses';
 import { useDatabaseConnection } from './database';
+
+import { CourseProgressRepository } from '../services/database/repositories/CourseProgressRepository';
 
 interface CompleteLessonData {
   lesson_id: number;
@@ -16,8 +13,6 @@ interface CompleteLessonData {
 
 interface ProgressContextData {
   completedLessonIndexes: Set<number>;
-  setSelectedCourse: (course_id: number) => void;
-  resetSelectedCourse: () => void;
   completeLesson: (data: CompleteLessonData) => Promise<void>;
 }
 
@@ -30,17 +25,13 @@ export const ProgressProvider: React.FC = ({ children }) => {
     return new CourseProgressRepository(connection);
   }, [connection]);
 
-  const [selectedCourseId, setSelectedCourse] = useState<number | null>(null);
-
-  const resetSelectedCourse = useCallback(() => {
-    setSelectedCourse(null);
-  }, []);
+  const { selectedCourse } = useCourses();
 
   const {
     data: completedLessonIndexes,
     mutate: mutateCompletedLessons,
   } = useSWR(
-    selectedCourseId ? ['database/course-progress', selectedCourseId] : null,
+    selectedCourse ? ['database/course-progress', selectedCourse.id] : null,
     async (_, course_id: number) => {
       const courseProgress = await progressRepository.findByCourseId(course_id);
 
@@ -50,12 +41,12 @@ export const ProgressProvider: React.FC = ({ children }) => {
 
   const completeLesson = useCallback(
     async ({ lesson_id, course_lesson_index }: CompleteLessonData) => {
-      if (!selectedCourseId) {
+      if (!selectedCourse) {
         return;
       }
 
       await progressRepository.create({
-        course_id: selectedCourseId,
+        course_id: selectedCourse.id,
         lesson_id,
         course_lesson_index,
       });
@@ -64,15 +55,13 @@ export const ProgressProvider: React.FC = ({ children }) => {
         return new Set(current).add(course_lesson_index);
       }, true);
     },
-    [mutateCompletedLessons, progressRepository, selectedCourseId],
+    [mutateCompletedLessons, progressRepository, selectedCourse],
   );
 
   return (
     <ProgressContext.Provider
       value={{
         completedLessonIndexes: completedLessonIndexes || new Set(),
-        setSelectedCourse,
-        resetSelectedCourse,
         completeLesson,
       }}
     >
@@ -81,10 +70,8 @@ export const ProgressProvider: React.FC = ({ children }) => {
   );
 };
 
-export function useLessonsProgress(course_id: number) {
+export function useLessonsProgress() {
   const context = useContext(ProgressContext);
-
-  context.setSelectedCourse(course_id);
 
   return context;
 }
