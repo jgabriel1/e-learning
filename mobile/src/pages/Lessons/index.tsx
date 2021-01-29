@@ -3,6 +3,8 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { useCourses } from '../../hooks/courses';
+import { useLessons } from '../../hooks/lessons';
+import { useLessonsProgress } from '../../hooks/progress';
 
 import ReturnButton from '../../components/ReturnButton';
 import FavoriteButton from '../../components/FavoriteButton';
@@ -20,11 +22,11 @@ import {
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
-import { useLessons } from '../../hooks/lessons';
 
 const Lessons: React.FC = () => {
   const { selectedCourse: course } = useCourses();
   const { courseLessons, setSelectedLesson } = useLessons();
+  const { completedLessonIndexes } = useLessonsProgress();
 
   const navigation = useNavigation();
 
@@ -66,12 +68,17 @@ const Lessons: React.FC = () => {
         <LessonsListContent
           keyExtractor={item => String(item.id)}
           data={courseLessons}
-          renderItem={({ item }) => (
-            <LessonCard
-              {...item}
-              onPress={() => handleNavigateToLesson(item.id)}
-            />
-          )}
+          renderItem={({ item }) => {
+            const isCompleted = completedLessonIndexes.has(item.lessonIndex);
+
+            return (
+              <LessonCard
+                {...item}
+                isCompleted={isCompleted}
+                onPress={() => handleNavigateToLesson(item.id)}
+              />
+            );
+          }}
         />
       </LessonsList>
     </Container>
