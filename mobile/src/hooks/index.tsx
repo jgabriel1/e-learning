@@ -10,11 +10,11 @@ const AppProvider: React.FC = ({ children }) => {
   return (
     <DatabaseProvider>
       <FavoritesProvider>
-        <ProgressProvider>
-          <CoursesProvider>
+        <CoursesProvider>
+          <ProgressProvider>
             <LessonsProvider>{children}</LessonsProvider>
-          </CoursesProvider>
-        </ProgressProvider>
+          </ProgressProvider>
+        </CoursesProvider>
       </FavoritesProvider>
     </DatabaseProvider>
   );
