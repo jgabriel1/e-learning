@@ -50,7 +50,7 @@ export const LessonsListContent = styled(
     name: string;
     lessonIndex: number;
     duration: number;
-    isCompleted: boolean;
+    isCompleted?: boolean;
   }>,
 ).attrs({
   contentContainerStyle: {
