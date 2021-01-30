@@ -7,6 +7,7 @@ from backend.shared.database.connection import (
 )
 from fastapi.param_functions import Depends
 from pydantic import BaseModel, parse_obj_as
+from sqlalchemy import bindparam, text
 
 from .entities import Lesson as LessonDAO
 from .schemas import CreateNewLessonData
@@ -123,5 +124,24 @@ class LessonsRepository:
         counts = self.db.execute(
             "SELECT course_id, COUNT() AS quantity FROM lessons GROUP BY course_id;",
         )
+
+        return dict(result for result in counts)
+
+    async def count_lessons_per_course_id(self, ids: List[int]) -> Mapping[int, int]:
+        query = text(
+            """
+            SELECT 
+                course_id,
+                COUNT() AS quantity
+            FROM 
+                lessons      
+            WHERE
+                course_id IN :courses_ids
+            GROUP BY 
+                course_id;
+            """
+        ).bindparams(bindparam("courses_ids", expanding=True))
+
+        counts = self.db.execute(query, {"courses_ids": ids})
 
         return dict(result for result in counts)

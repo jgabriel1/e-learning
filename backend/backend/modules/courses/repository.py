@@ -66,3 +66,8 @@ class CoursesRepository:
         courses = self.db.query(CourseDAO).all()
 
         return parse_obj_as(List[Course], courses)
+
+    async def find_many_by_id(self, ids: List[int]) -> List[Course]:
+        courses = self.db.query(CourseDAO).filter(CourseDAO.id.in_(ids)).all()
+
+        return parse_obj_as(List[Course], courses)

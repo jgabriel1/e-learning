@@ -27,7 +27,7 @@ interface ILessonData {
   description: string;
   lessonIndex: number;
   thumbnail_url: string;
-  isCompleted: boolean;
+  isCompleted?: boolean;
   videoId: string;
 }
 
@@ -67,7 +67,6 @@ export const LessonsProvider: React.FC = ({ children }) => {
           lessonIndex: lesson.lesson_index,
           videoId: lesson.video_id,
           thumbnail_url: lesson.thumbnail_url,
-          isCompleted: false,
         };
       });
     },

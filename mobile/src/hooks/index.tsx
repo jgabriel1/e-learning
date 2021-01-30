@@ -1,13 +1,22 @@
 import React from 'react';
 
 import { CoursesProvider } from './courses';
+import { DatabaseProvider } from './database';
+import { FavoritesProvider } from './favorites';
 import { LessonsProvider } from './lessons';
+import { ProgressProvider } from './progress';
 
 const AppProvider: React.FC = ({ children }) => {
   return (
-    <CoursesProvider>
-      <LessonsProvider>{children}</LessonsProvider>
-    </CoursesProvider>
+    <DatabaseProvider>
+      <FavoritesProvider>
+        <CoursesProvider>
+          <ProgressProvider>
+            <LessonsProvider>{children}</LessonsProvider>
+          </ProgressProvider>
+        </CoursesProvider>
+      </FavoritesProvider>
+    </DatabaseProvider>
   );
 };
 

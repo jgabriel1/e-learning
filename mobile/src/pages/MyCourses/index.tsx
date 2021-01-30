@@ -1,7 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+
+import { useCourses } from '../../hooks/courses';
+import { useFavoriteCourses } from '../../hooks/favorites';
 
 import CourseList from '../../components/CourseList';
 import CourseCard from '../../components/CourseCard';
@@ -11,17 +14,25 @@ import { Container, Header, SearchInput, SearchInputContainer } from './styles';
 import logoImg from '../../assets/images/logo-small.png';
 
 const MyCourses: React.FC = () => {
+  const { setSelectedCourseId } = useCourses();
+  const { favoriteCourses, loadFavorites } = useFavoriteCourses();
+
   const navigation = useNavigation();
 
   const handleNavigateToCourse = useCallback(
     (course_id: number) => {
+      setSelectedCourseId(course_id);
+
       navigation.navigate('LessonsStack', {
         screen: 'Lessons',
-        params: { course_id },
       });
     },
-    [navigation],
+    [navigation, setSelectedCourseId],
   );
+
+  useEffect(() => {
+    loadFavorites();
+  }, [loadFavorites]);
 
   return (
     <Container>
@@ -39,10 +50,13 @@ const MyCourses: React.FC = () => {
       </SearchInputContainer>
 
       <CourseList
-        courses={[]}
+        courses={favoriteCourses}
         title="Cursos Favoritos"
-        renderItem={({ item, index }) => (
-          <CourseCard {...item} onPress={() => handleNavigateToCourse(index)} />
+        renderItem={({ item }) => (
+          <CourseCard
+            {...item}
+            onPress={() => handleNavigateToCourse(item.id)}
+          />
         )}
       />
     </Container>

@@ -50,7 +50,7 @@ export const LessonsListContent = styled(
     name: string;
     lessonIndex: number;
     duration: number;
-    isCompleted: boolean;
+    isCompleted?: boolean;
   }>,
 ).attrs({
   contentContainerStyle: {
@@ -58,3 +58,5 @@ export const LessonsListContent = styled(
     justifyContent: 'space-between',
   },
 })``;
+
+export const EmptyView = styled.View``;
