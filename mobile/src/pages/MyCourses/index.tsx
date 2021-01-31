@@ -6,10 +6,11 @@ import { Feather } from '@expo/vector-icons';
 import { useCourses } from '../../hooks/courses';
 import { useFavoriteCourses } from '../../hooks/favorites';
 
+import FilterInput from '../../components/FilterInput';
 import CourseList from '../../components/CourseList';
 import CourseCard from '../../components/CourseCard';
 
-import { Container, Header, SearchInput, SearchInputContainer } from './styles';
+import { Container, Header } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
 
@@ -41,13 +42,7 @@ const MyCourses: React.FC = () => {
         <Feather name="power" color="#FF6680" size={24} />
       </Header>
 
-      <SearchInputContainer>
-        <Feather name="search" color="#C4C4D1" size={20} />
-        <SearchInput
-          placeholder="Busque um curso"
-          placeholderTextColor="#c4c4d1"
-        />
-      </SearchInputContainer>
+      <FilterInput />
 
       <CourseList
         courses={favoriteCourses}

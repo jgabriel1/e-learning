@@ -5,10 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 
 import { useCourses } from '../../hooks/courses';
 
+import FilterInput from '../../components/FilterInput';
 import CourseList from '../../components/CourseList';
 import CourseCard from '../../components/CourseCard';
 
-import { Container, Header, SearchInputContainer, SearchInput } from './styles';
+import { Container, Header } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
 
@@ -35,13 +36,7 @@ const Home: React.FC = () => {
         <Feather name="power" color="#FF6680" size={24} />
       </Header>
 
-      <SearchInputContainer>
-        <Feather name="search" color="#C4C4D1" size={20} />
-        <SearchInput
-          placeholder="Busque um curso"
-          placeholderTextColor="#c4c4d1"
-        />
-      </SearchInputContainer>
+      <FilterInput />
 
       <CourseList
         courses={courses}
