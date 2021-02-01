@@ -14,7 +14,7 @@ import { Container, Header } from './styles';
 import logoImg from '../../assets/images/logo-small.png';
 
 const Home: React.FC = () => {
-  const { courses, setSelectedCourseId } = useCourses();
+  const { courses, setSelectedCourseId, setFilterQuery } = useCourses();
 
   const navigation = useNavigation();
 
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         <Feather name="power" color="#FF6680" size={24} />
       </Header>
 
-      <FilterInput />
+      <FilterInput onChangeText={setFilterQuery} />
 
       <CourseList
         courses={courses}
