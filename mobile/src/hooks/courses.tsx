@@ -32,6 +32,7 @@ interface CoursesContextData {
   courses: ICourseData[];
   selectedCourse: ICourseData | null;
   setSelectedCourseId: (course_id: number) => void;
+  setFilterQuery: (query: string) => void;
   resetSelectedCourse: () => void;
 }
 
@@ -42,10 +43,20 @@ const CoursesContext = createContext<CoursesContextData>(
 export const CoursesProvider: React.FC = ({ children }) => {
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
+  const [filterQuery, setFilterQuery] = useState<string | null>(null);
+
   const { data: courses } = useSWR<ICourseData[]>(
-    'courses',
-    async (url: string) => {
-      const response = await api.get<ICourseResponseData[]>(url);
+    ['courses', filterQuery || ''],
+    async (url: string, query: string) => {
+      let response;
+
+      if (query.length >= 3) {
+        response = await api.get<ICourseResponseData[]>(
+          `${url}/search/${query}`,
+        );
+      } else {
+        response = await api.get<ICourseResponseData[]>(url);
+      }
 
       return response.data.map(course => ({
         id: course.id,
@@ -74,6 +85,7 @@ export const CoursesProvider: React.FC = ({ children }) => {
         courses: courses || [],
         selectedCourse,
         setSelectedCourseId,
+        setFilterQuery,
         resetSelectedCourse,
       }}
     >
