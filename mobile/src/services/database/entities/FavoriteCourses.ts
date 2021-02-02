@@ -13,6 +13,9 @@ export class FavoriteCourse {
   @Column({ unique: true })
   course_id: number;
 
+  @Column()
+  name: string;
+
   @CreateDateColumn()
   created_at: Date;
 }
