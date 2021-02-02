@@ -38,6 +38,17 @@ export const VideoPlaceholder = styled.ImageBackground.attrs({
   align-items: center;
 `;
 
+export const ThumbnailPlaceholderBackground = styled.View`
+  background: #333;
+
+  height: 210px;
+  justify-content: center;
+  align-items: center;
+
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+`;
+
 export const Title = styled.Text`
   font-family: ${'rubik400'};
   margin-bottom: 16px;
@@ -79,6 +90,19 @@ export const Description = styled.Text`
   font-size: 15px;
   line-height: 25px;
   margin-bottom: 24px;
+`;
+
+export const DescriptionPlaceholderContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  margin: 56px 0;
+`;
+
+export const DescriptionPlaceholderText = styled.Text`
+  font-family: ${'roboto400'};
+  color: #3d3d4c;
+  font-size: 18px;
 `;
 
 export const BottomButtonsContainer = styled.View`

@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
 } from 'react';
 import useSWR from 'swr';
@@ -10,14 +11,22 @@ import { useCourses } from './courses';
 
 import api from '../services/api';
 
-interface ILessonResponseData {
+interface ILessonsListResponseData {
   id: number;
   name: string;
   duration: number;
+  lesson_index: number;
+  course_id: number;
+}
+
+interface ILessonDetailsResponseData {
+  id: number;
+  name: string;
+  duration: number;
+  lesson_index: number;
   description: string;
   video_id: string;
   thumbnail_url: string;
-  lesson_index: number;
 }
 
 interface ILessonData {
@@ -25,10 +34,16 @@ interface ILessonData {
   name: string;
   duration: number;
   description: string;
+  video_id: string;
   lessonIndex: number;
   thumbnail_url: string;
   isCompleted?: boolean;
-  videoId: string;
+}
+
+interface ILessonDetailsData {
+  description: string;
+  thumbnail_url: string;
+  video_id: string;
 }
 
 interface LessonsContextData {
@@ -44,6 +59,7 @@ type SelectedLessonReducer = React.Reducer<
   | { type: 'SET_ID'; id: number }
   | { type: 'SET_NEXT' }
   | { type: 'SET_PREVIOUS' }
+  | { type: 'SET_DETAILS'; details: ILessonDetailsData }
 >;
 
 const LessonsContext = createContext<LessonsContextData>(
@@ -53,20 +69,20 @@ const LessonsContext = createContext<LessonsContextData>(
 export const LessonsProvider: React.FC = ({ children }) => {
   const { selectedCourse: course } = useCourses();
 
-  const { data: lessons } = useSWR(
+  const { data: lessons } = useSWR<ILessonData[]>(
     course ? `courses/${course.id}/lessons` : null,
     async (url: string) => {
-      const response = await api.get<ILessonResponseData[]>(url);
+      const response = await api.get<ILessonsListResponseData[]>(url);
 
       return response.data.map(lesson => {
         return {
           id: lesson.id,
           name: lesson.name,
           duration: lesson.duration,
-          description: lesson.description,
           lessonIndex: lesson.lesson_index,
-          videoId: lesson.video_id,
-          thumbnail_url: lesson.thumbnail_url,
+          video_id: '',
+          description: '',
+          thumbnail_url: '',
         };
       });
     },
@@ -114,6 +130,15 @@ export const LessonsProvider: React.FC = ({ children }) => {
             selectedLesson: previous || null,
           };
         }
+        case 'SET_DETAILS': {
+          return {
+            ...state,
+            selectedLesson: state.selectedLesson && {
+              ...state.selectedLesson,
+              ...action.details,
+            },
+          };
+        }
         default:
           return state;
       }
@@ -132,6 +157,30 @@ export const LessonsProvider: React.FC = ({ children }) => {
   const setPreviousLesson = useCallback(() => {
     selectedLessonDispatch({ type: 'SET_PREVIOUS' });
   }, []);
+
+  const setLessonDetails = useCallback(
+    ({ description, thumbnail_url, video_id }: ILessonDetailsData) => {
+      selectedLessonDispatch({
+        type: 'SET_DETAILS',
+        details: { description, thumbnail_url, video_id },
+      });
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (selectedLesson && !selectedLesson.description) {
+      api
+        .get<ILessonDetailsResponseData>(`lessons/${selectedLesson.id}`)
+        .then(({ data }) => {
+          setLessonDetails({
+            description: data.description,
+            thumbnail_url: data.thumbnail_url,
+            video_id: data.video_id,
+          });
+        });
+    }
+  }, [selectedLesson, setLessonDetails]);
 
   return (
     <LessonsContext.Provider
