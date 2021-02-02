@@ -13,6 +13,7 @@ import {
   MainContent,
   MainScrollable,
   VideoPlaceholder,
+  ThumbnailPlaceholderBackground,
   Title,
   InfoContainer,
   Index,
@@ -25,6 +26,8 @@ import {
   NextLessonButton,
   NextLessonButtonText,
   PlayButtonPressable,
+  DescriptionPlaceholderContainer,
+  DescriptionPlaceholderText,
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
@@ -71,15 +74,21 @@ const LessonDetail: React.FC = () => {
       </Header>
 
       <MainContent>
-        <PlayButtonPressable onPress={handleNavigateToVideo}>
-          <VideoPlaceholder
-            source={{ uri: lesson.thumbnail_url }}
-            resizeMode="cover"
-            resizeMethod="resize"
-          >
+        {lesson.thumbnail_url ? (
+          <PlayButtonPressable onPress={handleNavigateToVideo}>
+            <VideoPlaceholder
+              source={{ uri: lesson.thumbnail_url }}
+              resizeMode="cover"
+              resizeMethod="resize"
+            >
+              <Feather name="play-circle" size={54} color="#fff" />
+            </VideoPlaceholder>
+          </PlayButtonPressable>
+        ) : (
+          <ThumbnailPlaceholderBackground>
             <Feather name="play-circle" size={54} color="#fff" />
-          </VideoPlaceholder>
-        </PlayButtonPressable>
+          </ThumbnailPlaceholderBackground>
+        )}
 
         <MainScrollable>
           <Title>{lesson.name}</Title>
@@ -96,21 +105,31 @@ const LessonDetail: React.FC = () => {
             </DurationContainer>
           </InfoContainer>
 
-          <Description>{lesson.description}</Description>
+          {!lesson.description ? (
+            <DescriptionPlaceholderContainer>
+              <DescriptionPlaceholderText>
+                Carregando descrição...
+              </DescriptionPlaceholderText>
+            </DescriptionPlaceholderContainer>
+          ) : (
+            <>
+              <Description>{lesson.description}</Description>
 
-          <BottomButtonsContainer>
-            <PreviousLessonButton onPress={handleNavigateToPreviousLesson}>
-              <Feather name="arrow-left" color="#ff6680" size={20} />
+              <BottomButtonsContainer>
+                <PreviousLessonButton onPress={handleNavigateToPreviousLesson}>
+                  <Feather name="arrow-left" color="#ff6680" size={20} />
 
-              <PreviousLessonButtonText>Anterior</PreviousLessonButtonText>
-            </PreviousLessonButton>
+                  <PreviousLessonButtonText>Anterior</PreviousLessonButtonText>
+                </PreviousLessonButton>
 
-            <NextLessonButton onPress={handleNavigateToNextLesson}>
-              <NextLessonButtonText>Próxima</NextLessonButtonText>
+                <NextLessonButton onPress={handleNavigateToNextLesson}>
+                  <NextLessonButtonText>Próxima</NextLessonButtonText>
 
-              <Feather name="arrow-right" color="#ffffff" size={20} />
-            </NextLessonButton>
-          </BottomButtonsContainer>
+                  <Feather name="arrow-right" color="#ffffff" size={20} />
+                </NextLessonButton>
+              </BottomButtonsContainer>
+            </>
+          )}
         </MainScrollable>
       </MainContent>
     </Container>
