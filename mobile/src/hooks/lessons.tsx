@@ -34,10 +34,10 @@ interface ILessonData {
   name: string;
   duration: number;
   description: string;
+  video_id: string;
   lessonIndex: number;
   thumbnail_url: string;
   isCompleted?: boolean;
-  videoId: string;
 }
 
 interface ILessonDetailsData {
@@ -80,7 +80,7 @@ export const LessonsProvider: React.FC = ({ children }) => {
           name: lesson.name,
           duration: lesson.duration,
           lessonIndex: lesson.lesson_index,
-          videoId: '',
+          video_id: '',
           description: '',
           thumbnail_url: '',
         };

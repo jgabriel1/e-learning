@@ -36,7 +36,7 @@ const PlayVideo: React.FC = () => {
         scrollEnabled={false}
         allowsBackForwardNavigationGestures={Platform.OS === 'ios'}
         source={{
-          uri: `https://youtube.com/embed/${lesson?.videoId}`,
+          uri: `https://youtube.com/embed/${lesson?.video_id}`,
         }}
       />
     </Container>
