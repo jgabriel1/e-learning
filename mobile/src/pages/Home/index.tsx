@@ -3,6 +3,8 @@ import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
+import { useDebouncedCallback } from '../../utils/hooks/useDebouncedCallback';
+
 import { useCourses } from '../../hooks/courses';
 
 import FilterInput from '../../components/FilterInput';
@@ -29,6 +31,13 @@ const Home: React.FC = () => {
     [navigation, setSelectedCourseId],
   );
 
+  const debouncedSetFilterQuery = useDebouncedCallback(
+    (text: string) => {
+      setFilterQuery(text);
+    },
+    [setFilterQuery],
+  );
+
   return (
     <Container>
       <Header>
@@ -36,7 +45,7 @@ const Home: React.FC = () => {
         <Feather name="power" color="#FF6680" size={24} />
       </Header>
 
-      <FilterInput onChangeText={setFilterQuery} />
+      <FilterInput onChangeText={debouncedSetFilterQuery} />
 
       <CourseList
         courses={courses}
