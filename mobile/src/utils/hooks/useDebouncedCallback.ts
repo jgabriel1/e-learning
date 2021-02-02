@@ -22,6 +22,10 @@ export function useDebouncedCallback(
 
   const internalCallback = useCallback(
     (...args: any[]) => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+
       timeout.current = setTimeout(async () => {
         await callback(...args);
       }, delay);
