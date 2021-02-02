@@ -1,4 +1,4 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection, Repository, Like } from 'typeorm';
 
 import { FavoriteCourse } from '../entities/FavoriteCourses';
 
@@ -41,5 +41,13 @@ export class FavoriteCoursesRepository {
 
   public async delete(course_id: ID): Promise<void> {
     await this.repository.delete({ course_id });
+  }
+
+  public async searchByName(query: string): Promise<FavoriteCourse[]> {
+    const possibleCourses = await this.repository.find({
+      name: Like(`%${query}%`),
+    });
+
+    return possibleCourses;
   }
 }
