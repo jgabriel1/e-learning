@@ -71,3 +71,10 @@ class CoursesRepository:
         courses = self.db.query(CourseDAO).filter(CourseDAO.id.in_(ids)).all()
 
         return parse_obj_as(List[Course], courses)
+
+    async def search_many(self, query: str) -> List[Course]:
+        courses = (
+            self.db.query(CourseDAO).filter(CourseDAO.name.like(f"%{query}%")).all()
+        )
+
+        return parse_obj_as(List[Course], courses)

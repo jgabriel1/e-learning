@@ -1,8 +1,13 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection, Repository, Like } from 'typeorm';
 
 import { FavoriteCourse } from '../entities/FavoriteCourses';
 
 type ID = number;
+
+interface CreateFavoriteCourseDTO {
+  course_id: ID;
+  name: string;
+}
 
 export class FavoriteCoursesRepository {
   private repository: Repository<FavoriteCourse>;
@@ -23,8 +28,11 @@ export class FavoriteCoursesRepository {
     return favorites;
   }
 
-  public async create(course_id: ID): Promise<FavoriteCourse> {
-    const favorite = this.repository.create({ course_id });
+  public async create({
+    course_id,
+    name,
+  }: CreateFavoriteCourseDTO): Promise<FavoriteCourse> {
+    const favorite = this.repository.create({ course_id, name });
 
     await this.repository.save(favorite);
 
@@ -33,5 +41,13 @@ export class FavoriteCoursesRepository {
 
   public async delete(course_id: ID): Promise<void> {
     await this.repository.delete({ course_id });
+  }
+
+  public async searchByName(query: string): Promise<FavoriteCourse[]> {
+    const possibleCourses = await this.repository.find({
+      name: Like(`%${query}%`),
+    });
+
+    return possibleCourses;
   }
 }

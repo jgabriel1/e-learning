@@ -46,7 +46,11 @@ const Lessons: React.FC = () => {
 
         <Image source={logoImg} />
 
-        {course ? <FavoriteButton course_id={course?.id} /> : <EmptyView />}
+        {course ? (
+          <FavoriteButton course_id={course?.id} name={course.title} />
+        ) : (
+          <EmptyView />
+        )}
       </Header>
 
       <LessonsList>

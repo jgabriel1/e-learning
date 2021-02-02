@@ -6,9 +6,10 @@ import { useFavoriteCourses } from '../../hooks/favorites';
 
 interface FavoriteButtonProps {
   course_id: number;
+  name: string;
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({ course_id }) => {
+const FavoriteButton: React.FC<FavoriteButtonProps> = ({ course_id, name }) => {
   const { checkFavorite, toggleFavorite } = useFavoriteCourses();
 
   const [isFavorite, setIsFavorite] = useState(false);
@@ -16,8 +17,11 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ course_id }) => {
   const handleToggleFavorite = useCallback(async () => {
     setIsFavorite(current => !current);
 
-    await toggleFavorite(course_id);
-  }, [course_id, toggleFavorite]);
+    await toggleFavorite({
+      course_id,
+      name,
+    });
+  }, [course_id, name, toggleFavorite]);
 
   useEffect(() => {
     checkFavorite(course_id).then(setIsFavorite);

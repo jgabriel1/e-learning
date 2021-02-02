@@ -5,6 +5,7 @@ from .services import (
     index_courses_from_list,
     list_all_courses,
     list_lessons_for_course,
+    search_courses_by_name,
     update_course,
 )
 
@@ -23,3 +24,5 @@ courses_router.add_api_route(
 courses_router.add_api_route(
     "/{course_id}", update_course, methods=["PUT"], status_code=204
 )
+
+courses_router.add_api_route("/search/{query}", search_courses_by_name, methods=["GET"])

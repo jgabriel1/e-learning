@@ -3,17 +3,20 @@ import { Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
+import { useDebouncedCallback } from '../../utils/hooks/useDebouncedCallback';
+
 import { useCourses } from '../../hooks/courses';
 
+import FilterInput from '../../components/FilterInput';
 import CourseList from '../../components/CourseList';
 import CourseCard from '../../components/CourseCard';
 
-import { Container, Header, SearchInputContainer, SearchInput } from './styles';
+import { Container, Header } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
 
 const Home: React.FC = () => {
-  const { courses, setSelectedCourseId } = useCourses();
+  const { courses, setSelectedCourseId, setFilterQuery } = useCourses();
 
   const navigation = useNavigation();
 
@@ -28,6 +31,13 @@ const Home: React.FC = () => {
     [navigation, setSelectedCourseId],
   );
 
+  const debouncedSetFilterQuery = useDebouncedCallback(
+    (text: string) => {
+      setFilterQuery(text);
+    },
+    [setFilterQuery],
+  );
+
   return (
     <Container>
       <Header>
@@ -35,13 +45,7 @@ const Home: React.FC = () => {
         <Feather name="power" color="#FF6680" size={24} />
       </Header>
 
-      <SearchInputContainer>
-        <Feather name="search" color="#C4C4D1" size={20} />
-        <SearchInput
-          placeholder="Busque um curso"
-          placeholderTextColor="#c4c4d1"
-        />
-      </SearchInputContainer>
+      <FilterInput onChangeText={debouncedSetFilterQuery} />
 
       <CourseList
         courses={courses}

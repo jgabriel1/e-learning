@@ -26,12 +26,18 @@ interface ICourseData {
   imageURL: string;
 }
 
+interface IToggleFavoriteData {
+  course_id: number;
+  name: string;
+}
+
 interface FavoritesContextData {
   favoriteCoursesIds: number[];
   favoriteCourses: ICourseData[];
   loadFavorites: () => void;
   checkFavorite: (course_id: number) => Promise<boolean>;
-  toggleFavorite: (course_id: number) => Promise<void>;
+  toggleFavorite: (data: IToggleFavoriteData) => Promise<void>;
+  setFilterQuery: (query: string) => void;
 }
 
 const FavoritesContext = createContext<FavoritesContextData>(
@@ -51,10 +57,20 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     setShouldLoadFavorites(true);
   }, []);
 
+  const [filterQuery, setFilterQuery] = useState<string | null>(null);
+
   const { data: favoriteCoursesIds, mutate: mutateFavoritesIds } = useSWR(
-    shouldLoadfavorites ? 'database/favorite-courses' : null,
-    async () => {
-      const favorites = await favoritesRepository.listAll();
+    shouldLoadfavorites
+      ? ['database/favorite-courses', filterQuery || '']
+      : null,
+    async (_, query: string) => {
+      let favorites;
+
+      if (query.length >= 3) {
+        favorites = await favoritesRepository.searchByName(query);
+      } else {
+        favorites = await favoritesRepository.listAll();
+      }
 
       const favoritesIds = favorites.map(favorite => favorite.course_id);
 
@@ -90,11 +106,14 @@ export const FavoritesProvider: React.FC = ({ children }) => {
   );
 
   const toggleFavorite = useCallback(
-    async (course_id: number) => {
+    async ({ course_id, name }: IToggleFavoriteData) => {
       const isFavorite = await checkFavorite(course_id);
 
       if (!isFavorite) {
-        await favoritesRepository.create(course_id);
+        await favoritesRepository.create({
+          course_id,
+          name,
+        });
 
         mutateFavoritesIds(current => current && [...current, course_id]);
       } else {
@@ -116,6 +135,7 @@ export const FavoritesProvider: React.FC = ({ children }) => {
         loadFavorites,
         checkFavorite,
         toggleFavorite,
+        setFilterQuery,
       }}
     >
       {children}

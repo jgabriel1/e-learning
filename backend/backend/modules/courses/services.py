@@ -49,6 +49,26 @@ async def index_courses_from_list(
     ]
 
 
+async def search_courses_by_name(
+    query: str,
+    courses_repository: CoursesRepository = Depends(),
+    lessons_repository: LessonsRepository = Depends(),
+):
+    courses = await courses_repository.search_many(query)
+
+    lesson_counts = await lessons_repository.count_lessons_per_course_id(
+        [course.id for course in courses],
+    )
+
+    return [
+        ListCoursesCourseData(
+            **course.dict(),
+            lessons_count=lesson_counts.get(course.id) or 0,
+        )
+        for course in courses
+    ]
+
+
 async def list_lessons_for_course(
     course_id: int = Path(...),
     mac_id: Optional[str] = Header(None),
