@@ -37,6 +37,7 @@ interface FavoritesContextData {
   loadFavorites: () => void;
   checkFavorite: (course_id: number) => Promise<boolean>;
   toggleFavorite: (data: IToggleFavoriteData) => Promise<void>;
+  setFilterQuery: (query: string) => void;
 }
 
 const FavoritesContext = createContext<FavoritesContextData>(
@@ -56,10 +57,20 @@ export const FavoritesProvider: React.FC = ({ children }) => {
     setShouldLoadFavorites(true);
   }, []);
 
+  const [filterQuery, setFilterQuery] = useState<string | null>(null);
+
   const { data: favoriteCoursesIds, mutate: mutateFavoritesIds } = useSWR(
-    shouldLoadfavorites ? 'database/favorite-courses' : null,
-    async () => {
-      const favorites = await favoritesRepository.listAll();
+    shouldLoadfavorites
+      ? ['database/favorite-courses', filterQuery || '']
+      : null,
+    async (_, query: string) => {
+      let favorites;
+
+      if (query.length >= 3) {
+        favorites = await favoritesRepository.searchByName(query);
+      } else {
+        favorites = await favoritesRepository.listAll();
+      }
 
       const favoritesIds = favorites.map(favorite => favorite.course_id);
 
@@ -124,6 +135,7 @@ export const FavoritesProvider: React.FC = ({ children }) => {
         loadFavorites,
         checkFavorite,
         toggleFavorite,
+        setFilterQuery,
       }}
     >
       {children}
