@@ -26,12 +26,17 @@ interface ICourseData {
   imageURL: string;
 }
 
+interface IToggleFavoriteData {
+  course_id: number;
+  name: string;
+}
+
 interface FavoritesContextData {
   favoriteCoursesIds: number[];
   favoriteCourses: ICourseData[];
   loadFavorites: () => void;
   checkFavorite: (course_id: number) => Promise<boolean>;
-  toggleFavorite: (course_id: number) => Promise<void>;
+  toggleFavorite: (data: IToggleFavoriteData) => Promise<void>;
 }
 
 const FavoritesContext = createContext<FavoritesContextData>(
@@ -90,11 +95,14 @@ export const FavoritesProvider: React.FC = ({ children }) => {
   );
 
   const toggleFavorite = useCallback(
-    async (course_id: number) => {
+    async ({ course_id, name }: IToggleFavoriteData) => {
       const isFavorite = await checkFavorite(course_id);
 
       if (!isFavorite) {
-        await favoritesRepository.create(course_id);
+        await favoritesRepository.create({
+          course_id,
+          name,
+        });
 
         mutateFavoritesIds(current => current && [...current, course_id]);
       } else {
