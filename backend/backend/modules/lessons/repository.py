@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Iterable, List, Mapping
+from typing import Iterable, List, Mapping, Optional
 
 from backend.shared.database.connection import (
     DatabaseConnection,
@@ -119,6 +119,11 @@ class LessonsRepository:
         )
 
         return parse_obj_as(List[Lesson], lessons)
+
+    async def find_one_by_id(self, id: int) -> Optional[Lesson]:
+        lesson = self.db.query(LessonDAO).filter(LessonDAO.id == id).first()
+
+        return Lesson.from_orm(lesson)
 
     async def count_lessons_per_course(self) -> Mapping[int, int]:
         counts = self.db.execute(

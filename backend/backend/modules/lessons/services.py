@@ -5,6 +5,15 @@ from .repository import LessonsRepository
 from .schemas import CreateNewLessonData, UpdateLessonData
 
 
+async def show_lesson_details(
+    lesson_id: int = Path(...),
+    lessons_repository: LessonsRepository = Depends(),
+):
+    lesson = await lessons_repository.find_one_by_id(lesson_id)
+
+    return lesson
+
+
 async def create_new_lesson(
     lesson_data: CreateNewLessonData,
     lessons_repository: LessonsRepository = Depends(),
