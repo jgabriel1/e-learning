@@ -4,6 +4,11 @@ import { FavoriteCourse } from '../entities/FavoriteCourses';
 
 type ID = number;
 
+interface CreateFavoriteCourseDTO {
+  course_id: ID;
+  name: string;
+}
+
 export class FavoriteCoursesRepository {
   private repository: Repository<FavoriteCourse>;
 
@@ -23,8 +28,11 @@ export class FavoriteCoursesRepository {
     return favorites;
   }
 
-  public async create(course_id: ID): Promise<FavoriteCourse> {
-    const favorite = this.repository.create({ course_id });
+  public async create({
+    course_id,
+    name,
+  }: CreateFavoriteCourseDTO): Promise<FavoriteCourse> {
+    const favorite = this.repository.create({ course_id, name });
 
     await this.repository.save(favorite);
 
