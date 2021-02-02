@@ -1,13 +1,15 @@
-from typing import Optional
+from typing import List, Optional
 
 from backend.modules.lessons.repository import LessonsRepository
 from fastapi import Depends, Header, Path, Response
+from pydantic.tools import parse_obj_as
 
 from .repository import CoursesRepository
 from .schemas import (
     CreateNewCourseData,
     IndexCoursesFromListData,
     ListCoursesCourseData,
+    ListLessonsForCourseData,
     UpdateCourseData,
 )
 
@@ -76,7 +78,7 @@ async def list_lessons_for_course(
 ):
     lessons = await lessons_repository.list_by_course_id(course_id)
 
-    return lessons
+    return parse_obj_as(List[ListLessonsForCourseData], lessons)
 
 
 async def create_course(

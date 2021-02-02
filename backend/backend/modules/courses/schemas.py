@@ -9,6 +9,14 @@ class ListCoursesCourseData(Course):
     lessons_count: int
 
 
+class ListLessonsForCourseData(BaseModel):
+    id: int
+    name: str
+    duration: int
+    lesson_index: int
+    course_id: int
+
+
 class CreateNewCourseData(BaseModel):
     name: str
     image: str
