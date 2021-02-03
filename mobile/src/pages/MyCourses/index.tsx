@@ -1,19 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
-import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import { useDebouncedCallback } from '../../utils/hooks/useDebouncedCallback';
 
 import { useCourses } from '../../hooks/courses';
 import { useFavoriteCourses } from '../../hooks/favorites';
 
-import FilterInput from '../../components/FilterInput';
+import SearchHeader from '../../components/SearchHeader';
 import CourseList from '../../components/CourseList';
 import CourseCard from '../../components/CourseCard';
 
-import { Container, Header } from './styles';
-
-import logoImg from '../../assets/images/logo-small.png';
+import { Container } from './styles';
 
 const MyCourses: React.FC = () => {
   const { setSelectedCourseId } = useCourses();
@@ -36,24 +31,13 @@ const MyCourses: React.FC = () => {
     [navigation, setSelectedCourseId],
   );
 
-  const debouncedSetFilterQuery = useDebouncedCallback(
-    (text: string) => {
-      setFilterQuery(text);
-    },
-    [setFilterQuery],
-  );
-
   useEffect(() => {
     loadFavorites();
   }, [loadFavorites]);
 
   return (
     <Container>
-      <Header>
-        <Image source={logoImg} />
-      </Header>
-
-      <FilterInput onChangeText={debouncedSetFilterQuery} />
+      <SearchHeader searchValueSetFunction={setFilterQuery} />
 
       <CourseList
         courses={favoriteCourses}
