@@ -12,6 +12,11 @@ export const Header = styled.View`
   justify-content: space-between;
 `;
 
+export const EmptyView = styled.View`
+  height: 24px;
+  width: 24px;
+`;
+
 export const MainContent = styled.View`
   flex: 1;
   border-top-left-radius: 24px;

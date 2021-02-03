@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Image } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { useDebouncedCallback } from '../../utils/hooks/useDebouncedCallback';
@@ -42,7 +41,6 @@ const Home: React.FC = () => {
     <Container>
       <Header>
         <Image source={logoImg} />
-        <Feather name="power" color="#FF6680" size={24} />
       </Header>
 
       <FilterInput onChangeText={debouncedSetFilterQuery} />
