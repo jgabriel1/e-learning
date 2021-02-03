@@ -1,18 +1,13 @@
 import React, { useCallback } from 'react';
-import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import { useDebouncedCallback } from '../../utils/hooks/useDebouncedCallback';
 
 import { useCourses } from '../../hooks/courses';
 
-import FilterInput from '../../components/FilterInput';
+import SearchHeader from '../../components/SearchHeader';
 import CourseList from '../../components/CourseList';
 import CourseCard from '../../components/CourseCard';
 
-import { Container, Header } from './styles';
-
-import logoImg from '../../assets/images/logo-small.png';
+import { Container } from './styles';
 
 const Home: React.FC = () => {
   const { courses, setSelectedCourseId, setFilterQuery } = useCourses();
@@ -30,20 +25,9 @@ const Home: React.FC = () => {
     [navigation, setSelectedCourseId],
   );
 
-  const debouncedSetFilterQuery = useDebouncedCallback(
-    (text: string) => {
-      setFilterQuery(text);
-    },
-    [setFilterQuery],
-  );
-
   return (
     <Container>
-      <Header>
-        <Image source={logoImg} />
-      </Header>
-
-      <FilterInput onChangeText={debouncedSetFilterQuery} />
+      <SearchHeader searchValueSetFunction={setFilterQuery} />
 
       <CourseList
         courses={courses}
