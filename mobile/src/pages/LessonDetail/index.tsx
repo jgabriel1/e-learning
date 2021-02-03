@@ -28,6 +28,7 @@ import {
   PlayButtonPressable,
   DescriptionPlaceholderContainer,
   DescriptionPlaceholderText,
+  EmptyView,
 } from './styles';
 
 import logoImg from '../../assets/images/logo-small.png';
@@ -70,7 +71,7 @@ const LessonDetail: React.FC = () => {
 
         <Image source={logoImg} />
 
-        <Feather name="heart" size={24} color="#FF6680" />
+        <EmptyView />
       </Header>
 
       <MainContent>

@@ -59,4 +59,7 @@ export const LessonsListContent = styled(
   },
 })``;
 
-export const EmptyView = styled.View``;
+export const EmptyView = styled.View`
+  height: 24px;
+  width: 24px;
+`;
