@@ -8,7 +8,11 @@ class ID(int):
 
 
 class Base(BaseModel):
-    id: ID
+    """
+    These are the attributes that should only be available after the record gets persisted.
+    """
+
+    id: ID = None
     created_at: datetime = None
     updated_at: datetime = None
 
