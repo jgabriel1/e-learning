@@ -12,4 +12,4 @@ class CourseModel(DeclarativeBase):
     name = Column(String, nullable=False)
     image = Column(String, nullable=True)
 
-    lessons = relationship("Lesson")
+    lessons = relationship("LessonModel")
