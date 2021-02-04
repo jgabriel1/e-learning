@@ -12,6 +12,10 @@ class ICoursesRepository(metaclass=ABCMeta):
         ...
 
     @abstractmethod
+    async def exists_by_name(self, name: str) -> bool:
+        ...
+
+    @abstractmethod
     async def find_all(self) -> List[Course]:
         ...
 
