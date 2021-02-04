@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String
 
 from backend.domain.model.lesson import Lesson
-from backend.shared.database.base_table import DeclarativeBase
+from backend.infra.database.model.base import DeclarativeBase
 
 
 class LessonModel(DeclarativeBase):
