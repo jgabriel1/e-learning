@@ -1,6 +1,6 @@
 from typing import Optional
 
-from backend.domain.dto import CreateLessonDTO, UpdateLessonDTO
+from backend.domain.dto import CreateLessonDTO
 from backend.domain.exception import NonexistentCourseError, NonexistentLessonError
 from backend.domain.model.base import ID
 from backend.domain.model.lesson import Lesson
@@ -37,14 +37,8 @@ class LessonsUseCase:
                 "Cannot create a lesson for a course that does not exist",
             )
 
-        lesson = await self._lessons_repository.create(
-            data=lesson_data,
-        )
+        lesson = Lesson.parse_obj(lesson_data)
+
+        await self._lessons_repository.save(lesson)
 
         return lesson
-
-    async def update_lesson(self, lesson_id: ID, update_data: UpdateLessonDTO) -> None:
-        await self._lessons_repository.update_by_id(
-            lesson_id=lesson_id,
-            update_data=update_data,
-        )

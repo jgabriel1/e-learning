@@ -1,6 +1,6 @@
 from typing import List
 
-from backend.domain.dto import CreateCourseDTO, UpdateCourseDTO
+from backend.domain.dto import CreateCourseDTO
 from backend.domain.exception import CourseNameAlreadyExistsError
 from backend.domain.model.base import ID
 from backend.domain.model.course import Course
@@ -27,7 +27,7 @@ class CoursesUseCase:
         """
         courses = await self._courses_repository.find_all()
 
-        lesson_counts = await self._lessons_repository.count_lessons_all()
+        lesson_counts = await self._lessons_repository.count_for_all_courses()
 
         for course in courses:
             course.lessons_count = lesson_counts.get(course.id) or 0
@@ -35,9 +35,9 @@ class CoursesUseCase:
         return courses
 
     async def list_courses_by_name_search(self, name: str) -> List[Course]:
-        courses = await self._courses_repository.find_many_by_name_like(name)
+        courses = await self._courses_repository.find_many_with_name_like(name)
 
-        lesson_counts = await self._lessons_repository.count_lessons_per_course_id(
+        lesson_counts = await self._lessons_repository.count_for_courses(
             [course.id for course in courses],
         )
 
@@ -47,7 +47,7 @@ class CoursesUseCase:
         return courses
 
     async def list_lessons_for_course(self, course_id: ID) -> List[Lesson]:
-        lessons = await self._lessons_repository.list_by_course_id(course_id)
+        lessons = await self._lessons_repository.find_all_for_course(course_id)
 
         return lessons
 
@@ -61,12 +61,8 @@ class CoursesUseCase:
                 "Unable to create a course because this name is already taken."
             )
 
-        course = await self._courses_repository.create(data)
+        course = Course.parse_obj(data)
+
+        await self._courses_repository.save(course)
 
         return course
-
-    async def update_course(self, course_id: ID, update_data: UpdateCourseDTO) -> None:
-        await self._courses_repository.update_by_id(
-            course_id=course_id,
-            update_data=update_data,
-        )

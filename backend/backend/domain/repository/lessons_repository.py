@@ -1,16 +1,13 @@
 from abc import ABCMeta, abstractmethod
 from typing import Iterable, List, Mapping, Optional
 
-from backend.domain.dto import CreateLessonDTO, UpdateLessonDTO
-from backend.shared.domain.model.types import ID
-
-
 from backend.domain.model.lesson import Lesson
+from backend.shared.domain.model.types import ID
 
 
 class ILessonsRepository(metaclass=ABCMeta):
     @abstractmethod
-    async def list_by_course_id(self, course_id: ID) -> List[Lesson]:
+    async def find_all_for_course(self, course_id: ID) -> List[Lesson]:
         ...
 
     @abstractmethod
@@ -18,27 +15,23 @@ class ILessonsRepository(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def create(self, data: CreateLessonDTO) -> Lesson:
+    async def save(self, lesson: Lesson) -> None:
         ...
 
     @abstractmethod
-    async def create_all_for_course(
+    async def save_many(
         self,
         course_id: ID,
-        lessons: Iterable[CreateLessonDTO],
-    ) -> List[Lesson]:
+        lessons: Iterable[Lesson],
+    ) -> None:
         ...
 
     @abstractmethod
-    async def update_by_id(self, lesson_id: ID, update_data: UpdateLessonDTO) -> None:
+    async def count_for_all_courses(self) -> Mapping[ID, int]:
         ...
 
     @abstractmethod
-    async def count_lessons_all(self) -> Mapping[ID, int]:
-        ...
-
-    @abstractmethod
-    async def count_lessons_per_course_id(
+    async def count_for_courses(
         self,
         course_ids: List[ID],
     ) -> Mapping[ID, int]:

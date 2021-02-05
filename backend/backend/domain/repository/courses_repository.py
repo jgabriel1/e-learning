@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import List
 
-from backend.domain.dto import CreateCourseDTO, UpdateCourseDTO
 from backend.domain.model.base import ID
 from backend.domain.model.course import Course
 
@@ -24,13 +23,9 @@ class ICoursesRepository(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def find_many_by_name_like(self, name: str) -> List[Course]:
+    async def find_many_with_name_like(self, name: str) -> List[Course]:
         ...
 
     @abstractmethod
-    async def create(self, data: CreateCourseDTO) -> Course:
-        ...
-
-    @abstractmethod
-    async def update_by_id(self, course_id: ID, update_data: UpdateCourseDTO) -> None:
+    async def save(self, course: Course) -> None:
         ...
