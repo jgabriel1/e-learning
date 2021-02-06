@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Iterable, List, Mapping, Optional
+from typing import List, Mapping, Optional
 
 from backend.domain.model.lesson import Lesson
 from backend.shared.domain.model.types import ID
@@ -19,11 +19,7 @@ class ILessonsRepository(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def save_many(
-        self,
-        course_id: ID,
-        lessons: Iterable[Lesson],
-    ) -> None:
+    async def save_many(self, lessons: List[Lesson]) -> None:
         ...
 
     @abstractmethod
@@ -31,8 +27,5 @@ class ILessonsRepository(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def count_for_courses(
-        self,
-        course_ids: List[ID],
-    ) -> Mapping[ID, int]:
+    async def count_for_courses(self, course_ids: List[ID]) -> Mapping[ID, int]:
         ...
