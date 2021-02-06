@@ -1,5 +1,5 @@
 from backend.domain.dto.base import BaseDTO
-from backend.domain.model.base import ID
+from backend.domain.model.types import ID
 
 
 class CreateLessonDTO(BaseDTO):
