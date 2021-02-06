@@ -1,9 +1,7 @@
 from typing import List
 
-from pydantic import parse_obj_as
-
-from backend.domain.model.base import ID
 from backend.domain.model.course import Course
+from backend.domain.model.types import ID
 from backend.domain.repository.courses_repository import ICoursesRepository
 from backend.infra.database.connection import DatabaseConnection
 from backend.infra.database.model import CourseModel
@@ -36,18 +34,18 @@ class CoursesRepositoryDB(ICoursesRepository):
     async def find_all(self) -> List[Course]:
         courses = self._db.query(CourseModel).all()
 
-        return parse_obj_as(List[Course], courses)
+        return Course.parse_list(courses)
 
     async def find_many_by_ids(self, course_ids: List[ID]) -> List[Course]:
         courses = (
             self._db.query(CourseModel).filter(CourseModel.id.in_(course_ids)).all()
         )
 
-        return parse_obj_as(List[Course], courses)
+        return Course.parse_list(courses)
 
     async def find_many_with_name_like(self, name: str) -> List[Course]:
         courses = (
             self._db.query(CourseModel).filter(CourseModel.name.like(f"%{name}%")).all()
         )
 
-        return parse_obj_as(List[Course], courses)
+        return Course.parse_list(courses)

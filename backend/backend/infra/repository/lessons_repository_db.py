@@ -1,10 +1,9 @@
 from typing import List, Mapping, Iterable, Optional
 
-from pydantic import parse_obj_as
 from sqlalchemy import text, bindparam
 
-from backend.domain.model.base import ID
 from backend.domain.model.lesson import Lesson
+from backend.domain.model.types import ID
 from backend.domain.repository.lessons_repository import ILessonsRepository
 from backend.infra.database.connection import DatabaseConnection
 from backend.infra.database.model import LessonModel
@@ -72,4 +71,4 @@ class LessonsRepositoryDB(ILessonsRepository):
             self._db.query(LessonModel).filter(LessonModel.course_id == course_id).all()
         )
 
-        return parse_obj_as(List[Lesson], lessons)
+        return Lesson.parse_list(lessons)
