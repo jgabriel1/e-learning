@@ -48,20 +48,20 @@ class TestCoursesRepository(IsolatedAsyncioTestCase):
         self.assertTrue(exists)
 
     async def test_find_all(self):
-        courses = [
-            Course.parse_obj(
+        courses = Course.parse_list(
+            [
                 {"name": f"Test course {i}", "image": "http://images.com/image.jpg"}
-            )
-            for i in range(5)
-        ]
+                for i in range(5)
+            ]
+        )
 
         for course in courses:
             await self.courses_repository.save(course)
 
+        fetched_courses = await self.courses_repository.find_all()
+
         created_courses_names = {course.name for course in courses}
-        fetched_courses_names = {
-            course.name for course in await self.courses_repository.find_all()
-        }
+        fetched_courses_names = {course.name for course in fetched_courses}
 
         self.assertEqual(len(fetched_courses_names), len(courses))
         self.assertTrue(created_courses_names.issubset(fetched_courses_names))
