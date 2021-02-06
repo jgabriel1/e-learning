@@ -2,7 +2,7 @@ from typing import List
 
 from backend.domain.dto import CreateCourseDTO
 from backend.domain.exception import CourseNameAlreadyExistsError
-from backend.domain.model.base import ID
+from backend.domain.model.types import ID
 from backend.domain.model.course import Course
 from backend.domain.model.lesson import Lesson
 from backend.domain.repository.courses_repository import ICoursesRepository

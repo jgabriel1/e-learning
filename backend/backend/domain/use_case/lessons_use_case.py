@@ -2,7 +2,7 @@ from typing import Optional
 
 from backend.domain.dto import CreateLessonDTO
 from backend.domain.exception import NonexistentCourseError, NonexistentLessonError
-from backend.domain.model.base import ID
+from backend.domain.model.types import ID
 from backend.domain.model.lesson import Lesson
 from backend.domain.repository.courses_repository import ICoursesRepository
 from backend.domain.repository.lessons_repository import ILessonsRepository

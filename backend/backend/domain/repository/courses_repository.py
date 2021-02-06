@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import List
 
-from backend.domain.model.base import ID
+from backend.domain.model.types import ID
 from backend.domain.model.course import Course
 
 
