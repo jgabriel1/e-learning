@@ -24,19 +24,19 @@ class YoutubePlaylistRepositoryAPI(IYoutubePlaylistRepository):
     def __init__(self, client: IHttpClient):
         load_dotenv()
 
-        self.KEY = os.getenv("YOUTUBE_API_KEY")
-        self.PLAYLIST_URL = os.getenv("YOUTUBE_API_PLAYLIST_URL")
-        self.PLAYLIST_ITEM_URL = os.getenv("YOUTUBE_API_PLAYLIST_ITEM_URL")
-        self.VIDEOS_URL = os.getenv("YOUTUBE_API_VIDEOS_URL")
+        self._KEY = os.getenv("YOUTUBE_API_KEY")
+        self._PLAYLIST_URL = os.getenv("YOUTUBE_API_PLAYLIST_URL")
+        self._PLAYLIST_ITEM_URL = os.getenv("YOUTUBE_API_PLAYLIST_ITEM_URL")
+        self._VIDEOS_URL = os.getenv("YOUTUBE_API_VIDEOS_URL")
 
         self._client = client
 
     async def get_playlist_info(self, playlist_id: str) -> YoutubePlaylist:
         response: YoutubeAPIPlaylistResponseData = await self._client.get(
-            url=self.PLAYLIST_URL,  # noqa
+            url=self._PLAYLIST_URL,  # noqa
             response_model=YoutubeAPIPlaylistResponseData,
             params=YoutubeAPIPlaylistRequestParams(
-                key=self.KEY,
+                key=self._KEY,
                 id=playlist_id,
             ).dict(),
         )
@@ -53,10 +53,10 @@ class YoutubePlaylistRepositoryAPI(IYoutubePlaylistRepository):
         self, playlist_id: str, page_size: int = 10
     ) -> AsyncIterable[YoutubeVideo]:
         response = await self._client.get(
-            url=self.PLAYLIST_ITEM_URL,  # noqa
+            url=self._PLAYLIST_ITEM_URL,  # noqa
             response_model=YoutubeAPIPlaylistItemResponseData,
             params=YoutubeAPIPlaylistItemRequestParams(
-                key=self.KEY,
+                key=self._KEY,
                 playlistId=playlist_id,
                 resultsPerPage=page_size,
             ).dict(exclude={"pageToken"}),
@@ -83,10 +83,10 @@ class YoutubePlaylistRepositoryAPI(IYoutubePlaylistRepository):
             next_page_token = response.nextPageToken
 
             response = await self._client.get(
-                url=self.PLAYLIST_ITEM_URL,  # noqa
+                url=self._PLAYLIST_ITEM_URL,  # noqa
                 response_model=YoutubeAPIPlaylistItemResponseData,
                 params=YoutubeAPIPlaylistItemRequestParams(
-                    key=self.KEY,
+                    key=self._KEY,
                     playlistId=playlist_id,
                     pageToken=next_page_token,
                     resultsPerPage=page_size,
@@ -97,10 +97,10 @@ class YoutubePlaylistRepositoryAPI(IYoutubePlaylistRepository):
 
     async def get_videos_durations(self, video_ids: Iterable[str]) -> Mapping[str, int]:
         response = await self._client.get(
-            url=self.VIDEOS_URL,  # noqa
+            url=self._VIDEOS_URL,  # noqa
             response_model=YoutubeAPIVideoResponseData,
             params=YoutubeAPIVideoRequestParams(
-                key=self.KEY,
+                key=self._KEY,
                 id=",".join(video_ids),
             ).dict(),
         )
