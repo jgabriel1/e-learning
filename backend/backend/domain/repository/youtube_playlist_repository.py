@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import AsyncIterable, List, Iterable
+from typing import AsyncIterable, List, Iterable, Mapping
 
 from backend.domain.model.youtube_playlist import YoutubePlaylist
 from backend.domain.model.youtube_video import YoutubeVideo
@@ -17,5 +17,5 @@ class IYoutubePlaylistRepository(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    async def get_videos_durations(self, video_ids: Iterable[str]) -> List[int]:
+    async def get_videos_durations(self, video_ids: Iterable[str]) -> Mapping[str, int]:
         ...
