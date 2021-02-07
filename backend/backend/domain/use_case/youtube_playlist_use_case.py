@@ -49,12 +49,12 @@ class YoutubePlaylistUseCase:
                 name=video.title,
                 description=video.description,
                 video_id=video.video_id,
-                duration=duration,
+                duration=videos_durations.get(video.video_id) or 0,
                 thumbnail_url=video.thumbnail_url,
                 lesson_index=index + 1,
                 course_id=created_course.id,
             )
-            for index, (video, duration) in enumerate(zip(videos, videos_durations))
+            for index, video in enumerate(videos)
         ]
 
         await self._lessons_repository.save_many(created_lessons)
