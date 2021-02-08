@@ -1,6 +1,5 @@
 import os
 
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
@@ -9,8 +8,6 @@ from backend.infra.database.model import DeclarativeBase
 
 class DatabaseConnection:
     def __init__(self) -> None:
-        load_dotenv()
-
         environment = os.getenv("ENV")
 
         if environment == "PROD":
@@ -29,6 +26,3 @@ class DatabaseConnection:
 
     def _create_tables(self) -> None:
         self._metadata.create_all(self._engine)
-
-
-database_connection = DatabaseConnection()
