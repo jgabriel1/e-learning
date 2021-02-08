@@ -23,7 +23,7 @@ class LessonsRepositoryDB(ILessonsRepository):
 
         self._db.commit()
 
-    async def save_many(self, course_id: ID, lessons: Iterable[Lesson]) -> None:
+    async def save_many(self, lessons: Iterable[Lesson]) -> None:
         new_lessons = [LessonModel.from_domain(lesson) for lesson in lessons]
 
         self._db.add_all(new_lessons)
