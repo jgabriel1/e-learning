@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import List, Mapping, Optional
 
 from backend.domain.model.lesson import Lesson
-from backend.shared.domain.model.types import ID
+from backend.domain.model.types import ID
 
 
 class ILessonsRepository(metaclass=ABCMeta):
