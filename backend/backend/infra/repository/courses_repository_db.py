@@ -45,7 +45,9 @@ class CoursesRepositoryDB(ICoursesRepository):
 
     async def find_many_with_name_like(self, name: str) -> List[Course]:
         courses = (
-            self._db.query(CourseModel).filter(CourseModel.name.like(f"%{name}%")).all()
+            self._db.query(CourseModel)
+            .filter(CourseModel.name.ilike(f"%{name}%"))
+            .all()
         )
 
         return Course.parse_list(courses)
