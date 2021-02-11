@@ -17,7 +17,7 @@ class DatabaseConnection:
         else:
             url = "sqlite:///./database.db"
 
-        self._engine = create_engine(url, connect_args={"check_same_thread": False})
+        self._engine = create_engine(url)
         self._metadata = DeclarativeBase.metadata
 
         self._create_tables()

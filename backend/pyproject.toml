@@ -14,9 +14,11 @@ aiosqlite = "^0.16.0"
 python-dotenv = "^0.15.0"
 requests = "^2.25.1"
 metomi-isodatetime = { git = "https://github.com/metomi/isodatetime.git" }
+psycopg2 = "^2.8.6"
 
 [tool.poetry.scripts]
 dev = "scripts:dev"
+prod = "scripts:prod"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

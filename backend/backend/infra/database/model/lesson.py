@@ -10,7 +10,7 @@ class LessonModel(DeclarativeBase):
 
     name = Column(String, nullable=False)
     duration = Column(Integer, nullable=False)
-    description = Column(String(200), nullable=False)
+    description = Column(String, nullable=False)
     video_id = Column(String)
     thumbnail_url = Column(String)
     lesson_index = Column(Integer, nullable=True)
