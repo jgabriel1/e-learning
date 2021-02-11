@@ -36,7 +36,7 @@ class LessonsRepositoryDB(ILessonsRepository):
 
     async def count_for_all_courses(self) -> Mapping[ID, int]:
         counts = self._db.execute(
-            "SELECT course_id, COUNT() AS quantity FROM lessons GROUP BY course_id;",
+            "SELECT course_id, COUNT(*) AS quantity FROM lessons GROUP BY course_id;",
         )
 
         return dict(count for count in counts)
@@ -46,7 +46,7 @@ class LessonsRepositoryDB(ILessonsRepository):
             """
             SELECT 
                 course_id,
-                COUNT() AS quantity
+                COUNT(*) AS quantity
             FROM 
                 lessons      
             WHERE
