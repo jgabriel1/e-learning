@@ -3,6 +3,6 @@ import uvicorn
 
 def dev():
     uvicorn.run(
-        app="backend.main:app",
+        app="backend.application.app:app",
         reload=True,
     )
