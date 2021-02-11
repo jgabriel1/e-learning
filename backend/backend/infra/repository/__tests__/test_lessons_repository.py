@@ -88,7 +88,7 @@ class TestLessonsRepository(IsolatedAsyncioTestCase):
             ]
         )
 
-        await self.lessons_repository.save_many(self.seed_course.id, lessons)
+        await self.lessons_repository.save_many(lessons)
 
         self.assertIsNotNone(lessons[0].id)
 
